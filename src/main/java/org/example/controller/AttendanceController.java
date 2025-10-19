@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,8 +28,22 @@ public class AttendanceController {
     @Autowired
     private UserRepository userRepository;
 
+    // Helper method to get client IP address for audit logging
+    private String getClientIP(HttpServletRequest request) {
+        String xForwardedFor = request.getHeader("X-Forwarded-For");
+        if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
+            return xForwardedFor.split(",")[0].trim();
+        }
+        String xRealIP = request.getHeader("X-Real-IP");
+        if (xRealIP != null && !xRealIP.isEmpty()) {
+            return xRealIP;
+        }
+        return request.getRemoteAddr();
+    }
+
     @PostMapping("/clock-in")
-    public ResponseEntity<?> clockIn(@RequestBody(required = false) Map<String, String> requestBody) {
+    public ResponseEntity<?> clockIn(@RequestBody(required = false) Map<String, String> requestBody, 
+                                   HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
         
         try {
@@ -62,15 +77,48 @@ public class AttendanceController {
             }
 
             String notes = requestBody != null ? requestBody.get("notes") : null;
+            LocalDateTime currentTime = LocalDateTime.now();
+
+            // Security validations
+            // 1. Business hours validation (7 AM to 10 PM)
+            int hour = currentTime.getHour();
+            if (hour < 7 || hour > 22) {
+                response.put("success", false);
+                response.put("message", "Clock-in is only allowed between 7:00 AM and 10:00 PM");
+                return ResponseEntity.badRequest().body(response);
+            }
+
+            // 2. Weekend validation (optional - can be enabled/disabled)
+            int dayOfWeek = currentTime.getDayOfWeek().getValue();
+            if (dayOfWeek == 6 || dayOfWeek == 7) { // Saturday or Sunday
+                response.put("success", false);
+                response.put("message", "Clock-in is not allowed on weekends");
+                return ResponseEntity.badRequest().body(response);
+            }
+
+            // 3. Check for suspicious rapid clock-ins (within 1 minute of last entry)
+            if (latestEntry.isPresent()) {
+                long minutesSinceLastEntry = java.time.Duration.between(
+                    latestEntry.get().getTimestamp(), currentTime).toMinutes();
+                if (minutesSinceLastEntry < 1) {
+                    response.put("success", false);
+                    response.put("message", "Please wait at least 1 minute between clock entries");
+                    return ResponseEntity.badRequest().body(response);
+                }
+            }
             
             AttendanceEntry entry = new AttendanceEntry(
                 user, 
                 AttendanceEntry.EntryType.CLOCK_IN, 
-                LocalDateTime.now(), 
+                currentTime, 
                 notes
             );
             
             AttendanceEntry savedEntry = attendanceEntryRepository.save(entry);
+
+            // Audit logging
+            System.out.println("AUDIT: User " + username + " clocked in at " + currentTime + 
+                             " (IP: " + getClientIP(request) + ")");
 
             response.put("success", true);
             response.put("message", "Successfully clocked in");
@@ -87,7 +135,8 @@ public class AttendanceController {
     }
 
     @PostMapping("/clock-out")
-    public ResponseEntity<?> clockOut(@RequestBody(required = false) Map<String, String> requestBody) {
+    public ResponseEntity<?> clockOut(@RequestBody(required = false) Map<String, String> requestBody,
+                                    HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
         
         try {
@@ -120,15 +169,40 @@ public class AttendanceController {
             }
 
             String notes = requestBody != null ? requestBody.get("notes") : null;
+            LocalDateTime currentTime = LocalDateTime.now();
+
+            // Security validations for clock-out
+            // 1. Business hours validation (7 AM to 11 PM)
+            int hour = currentTime.getHour();
+            if (hour < 7 || hour > 23) {
+                response.put("success", false);
+                response.put("message", "Clock-out is only allowed between 7:00 AM and 11:00 PM");
+                return ResponseEntity.badRequest().body(response);
+            }
+
+            // 2. Check for suspicious rapid clock-outs (within 1 minute of last entry)
+            if (latestEntry.isPresent()) {
+                long minutesSinceLastEntry = java.time.Duration.between(
+                    latestEntry.get().getTimestamp(), currentTime).toMinutes();
+                if (minutesSinceLastEntry < 1) {
+                    response.put("success", false);
+                    response.put("message", "Please wait at least 1 minute between clock entries");
+                    return ResponseEntity.badRequest().body(response);
+                }
+            }
             
             AttendanceEntry entry = new AttendanceEntry(
                 user, 
                 AttendanceEntry.EntryType.CLOCK_OUT, 
-                LocalDateTime.now(), 
+                currentTime, 
                 notes
             );
             
             AttendanceEntry savedEntry = attendanceEntryRepository.save(entry);
+
+            // Audit logging
+            System.out.println("AUDIT: User " + username + " clocked out at " + currentTime + 
+                             " (IP: " + getClientIP(request) + ")");
 
             response.put("success", true);
             response.put("message", "Successfully clocked out");

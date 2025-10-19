@@ -5,10 +5,24 @@ const AttendanceCalendar = ({ userId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [showExportDropdown, setShowExportDropdown] = useState(false);
 
   useEffect(() => {
     fetchAttendanceData();
   }, [userId, currentMonth]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showExportDropdown && !event.target.closest('.export-dropdown-container')) {
+        setShowExportDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showExportDropdown]);
 
   const fetchAttendanceData = async () => {
     try {
@@ -134,6 +148,100 @@ const AttendanceCalendar = ({ userId }) => {
 
   const stats = getAttendanceStats();
 
+  const exportAttendanceData = async (format = 'csv') => {
+    try {
+      const year = currentMonth.getFullYear();
+      const month = currentMonth.getMonth() + 1;
+      
+      const response = await fetch(`/api/admin/users/${userId}/attendance/export?year=${year}&month=${month}`, {
+        credentials: 'include'
+      });
+
+      if (response.ok) {
+        // Get the filename from the response headers
+        const contentDisposition = response.headers.get('Content-Disposition');
+        let filename = `attendance_${year}_${String(month).padStart(2, '0')}.csv`;
+        
+        if (contentDisposition) {
+          const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+          if (filenameMatch) {
+            filename = filenameMatch[1];
+          }
+        }
+
+        const csvContent = await response.text();
+
+        if (format === 'csv') {
+          // Download as CSV
+          downloadFile(csvContent, filename, 'text/csv');
+        } else if (format === 'excel') {
+          // Download Excel file from dedicated endpoint
+          downloadExcelFile(year, month);
+          return; // Exit early since we're making a separate request
+        }
+        
+        setShowExportDropdown(false);
+      } else {
+        setError('Failed to export attendance data');
+      }
+    } catch (error) {
+      console.error('Error exporting attendance data:', error);
+      setError('Error exporting attendance data');
+    }
+  };
+
+
+  const downloadFile = (content, filename, mimeType) => {
+    const blob = new Blob([content], { type: mimeType });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
+
+  const downloadExcelFile = async (year, month) => {
+    try {
+      const response = await fetch(`/api/admin/users/${userId}/attendance/export/excel?year=${year}&month=${month}`, {
+        credentials: 'include'
+      });
+
+      if (response.ok) {
+        // Get the filename from the response headers
+        const contentDisposition = response.headers.get('Content-Disposition');
+        let filename = `attendance_${year}_${String(month).padStart(2, '0')}.xlsx`;
+        
+        if (contentDisposition) {
+          const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+          if (filenameMatch) {
+            filename = filenameMatch[1];
+          }
+        }
+
+        // Create blob and download
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+        
+        setShowExportDropdown(false);
+      } else {
+        setError('Failed to export Excel file');
+      }
+    } catch (error) {
+      console.error('Error downloading Excel file:', error);
+      setError('Error downloading Excel file');
+    }
+  };
+
   if (loading) {
     return (
       <div className="attendance-calendar-loading">
@@ -165,27 +273,60 @@ const AttendanceCalendar = ({ userId }) => {
     <div className="attendance-calendar">
       {/* Calendar Header */}
       <div className="calendar-header">
-        <button 
-          onClick={() => navigateMonth('prev')} 
-          className="btn-small btn-outline"
-        >
-          ← Previous
-        </button>
-        <h4 className="calendar-title">
-          {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
-        </h4>
-        <button 
-          onClick={() => navigateMonth('next')} 
-          className="btn-small btn-outline"
-          disabled={(() => {
-            const nextMonth = new Date(currentMonth);
-            nextMonth.setMonth(currentMonth.getMonth() + 1);
-            const currentDate = new Date();
-            return nextMonth.getMonth() > currentDate.getMonth() || nextMonth.getFullYear() > currentDate.getFullYear();
-          })()}
-        >
-          Next →
-        </button>
+        <div className="calendar-navigation">
+          <button 
+            onClick={() => navigateMonth('prev')} 
+            className="btn-small btn-outline"
+          >
+            ← Previous
+          </button>
+          <h4 className="calendar-title">
+            {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
+          </h4>
+          <button 
+            onClick={() => navigateMonth('next')} 
+            className="btn-small btn-outline"
+            disabled={(() => {
+              const nextMonth = new Date(currentMonth);
+              nextMonth.setMonth(currentMonth.getMonth() + 1);
+              const currentDate = new Date();
+              return nextMonth.getMonth() > currentDate.getMonth() || nextMonth.getFullYear() > currentDate.getFullYear();
+            })()}
+          >
+            Next →
+          </button>
+        </div>
+        <div className="calendar-actions">
+          <div className="export-dropdown-container">
+            <button 
+              onClick={() => setShowExportDropdown(!showExportDropdown)}
+              className="btn-small btn-primary export-btn"
+              title="Export attendance data"
+            >
+              📊 Export ▼
+            </button>
+            {showExportDropdown && (
+              <div className="export-dropdown">
+                <button 
+                  onClick={() => exportAttendanceData('csv')}
+                  className="export-option"
+                  title="Download as CSV file"
+                >
+                  <span className="export-icon">📄</span>
+                  Download CSV
+                </button>
+                <button 
+                  onClick={() => exportAttendanceData('excel')}
+                  className="export-option"
+                  title="Download as Excel file"
+                >
+                  <span className="export-icon">📈</span>
+                  Download Excel
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Attendance Stats */}

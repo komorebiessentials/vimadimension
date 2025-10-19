@@ -849,6 +849,41 @@ body {
   transform: scale(1.05);
 }
 
+/* Disabled nav item styles */
+.nav-item-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  position: relative;
+}
+
+.nav-item-disabled:hover {
+  background: none !important;
+  transform: none !important;
+}
+
+.nav-item-disabled:hover::before {
+  left: -100% !important;
+}
+
+.nav-item-disabled:hover svg {
+  transform: none !important;
+  opacity: 0.8 !important;
+}
+
+/* Coming Soon badge */
+.coming-soon-badge {
+  background: #f59e0b;
+  color: white;
+  font-size: 0.6rem;
+  font-weight: 600;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  margin-left: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 /* Actions */
 .nav-actions-ultra {
   display: flex;
@@ -1438,12 +1473,20 @@ body {
   border-radius: 1rem;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   width: 100%;
-  max-width: 400px;
+  max-width: 450px;
   text-align: center;
 }
 
 .login-logo-container {
   margin-bottom: 1.5rem;
+}
+
+.login-logo-container h2 {
+  white-space: nowrap;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #667eea;
+  margin: 0;
 }
 
 .login-logo-img {
@@ -3638,6 +3681,11 @@ body {
   .login-container {
     padding: 2rem;
     margin: 1rem;
+    max-width: 90%;
+  }
+  
+  .login-logo-container h2 {
+    font-size: 1.25rem;
   }
   
   .page-title {
@@ -6744,6 +6792,109 @@ body {
   margin-bottom: 24px;
   padding-bottom: 16px;
   border-bottom: 1px solid #e2e8f0;
+}
+
+.calendar-navigation {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.calendar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.export-btn {
+  background: #10b981 !important;
+  color: white !important;
+  border: none !important;
+  padding: 8px 16px !important;
+  border-radius: 6px !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.export-btn:hover {
+  background: #059669 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3) !important;
+}
+
+.export-btn:active {
+  transform: translateY(0) !important;
+}
+
+.export-dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+.export-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 200px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.export-option {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  width: 100% !important;
+  padding: 12px 16px !important;
+  background: white !important;
+  border: none !important;
+  color: #374151 !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  text-align: left !important;
+}
+
+.export-option:hover {
+  background: #f8fafc !important;
+  color: #1e293b !important;
+}
+
+.export-option:active {
+  background: #e2e8f0 !important;
+}
+
+.export-icon {
+  font-size: 1rem;
+  width: 20px;
+  text-align: center;
+}
+
+/* Add animation for dropdown */
+.export-dropdown {
+  animation: dropdownFadeIn 0.2s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .calendar-title {

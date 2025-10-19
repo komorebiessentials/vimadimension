@@ -19,6 +19,11 @@ import CreateUser from './components/admin/CreateUser';
 import EditUser from './components/admin/EditUser';
 import UserDetails from './components/admin/UserDetails';
 import OrganizationRegister from './components/organization/OrganizationRegister';
+import InvoicesList from './components/invoices/InvoicesList';
+import CreateInvoice from './components/invoices/CreateInvoice';
+import InvoiceDetails from './components/invoices/InvoiceDetails';
+import EditInvoice from './components/invoices/EditInvoice';
+import AdminPayslipManagement from './components/payslips/AdminPayslipManagement';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -109,6 +114,11 @@ const App = () => {
               <Route path="/admin/users/create" element={<CreateUser />} />
               <Route path="/admin/users/:userId/edit" element={<EditUser />} />
               <Route path="/admin/users/:userId/details" element={<UserDetails />} />
+              <Route path="/invoices" element={<InvoicesList user={user} />} />
+              <Route path="/invoices/new" element={<CreateInvoice user={user} />} />
+              <Route path="/invoices/:id/details" element={<InvoiceDetails user={user} />} />
+              <Route path="/invoices/:id/edit" element={<EditInvoice user={user} />} />
+              <Route path="/admin/payslips" element={<AdminPayslipManagement user={user} />} />
             </>
           ) : (
             <Route path="*" element={<Navigate to="/login" replace />} />

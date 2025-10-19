@@ -13,10 +13,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.example.dto.UserRegistrationDto;
 import org.example.models.User;
+import java.util.HashMap;
+import java.util.Map;
 import org.example.models.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -197,17 +201,18 @@ public class AdminController {
                 ));
             }
             
-            Map<String, Object> userData = Map.of(
-                "id", user.getId(),
-                "username", user.getUsername(),
-                "name", user.getName() != null ? user.getName() : user.getUsername(),
-                "email", user.getEmail(),
-                "designation", user.getDesignation() != null ? user.getDesignation() : "",
-                "specialization", user.getSpecialization() != null ? user.getSpecialization() : "",
-                "bio", user.getBio() != null ? user.getBio() : "",
-                "enabled", user.isEnabled(),
-                "roles", user.getRoles().stream().map(Role::getName).collect(java.util.stream.Collectors.toList())
-            );
+            Map<String, Object> userData = new HashMap<>();
+            userData.put("id", user.getId());
+            userData.put("username", user.getUsername());
+            userData.put("name", user.getName() != null ? user.getName() : user.getUsername());
+            userData.put("email", user.getEmail());
+            userData.put("designation", user.getDesignation() != null ? user.getDesignation() : "");
+            userData.put("specialization", user.getSpecialization() != null ? user.getSpecialization() : "");
+            userData.put("bio", user.getBio() != null ? user.getBio() : "");
+            userData.put("enabled", user.isEnabled());
+            userData.put("organizationId", user.getOrganization() != null ? user.getOrganization().getId() : null);
+            userData.put("organizationName", user.getOrganization() != null ? user.getOrganization().getName() : null);
+            userData.put("roles", user.getRoles().stream().map(Role::getName).collect(java.util.stream.Collectors.toList()));
             
             return ResponseEntity.ok(Map.of(
                 "success", true,
@@ -332,6 +337,168 @@ public class AdminController {
                 "error", "Failed to fetch attendance data"
             ));
         }
+    }
+
+    // Export user attendance data for a specific month
+    @GetMapping("/users/{userId}/attendance/export")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> exportUserAttendance(
+            @PathVariable Long userId,
+            @RequestParam int year,
+            @RequestParam int month) {
+        try {
+            // Verify user exists
+            User user = userService.findById(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+
+            // Get detailed attendance data for export
+            List<Map<String, Object>> exportData = userService.getUserAttendanceForExport(userId, year, month);
+            
+            // Generate CSV content
+            StringBuilder csvContent = new StringBuilder();
+            
+            // CSV Header
+            csvContent.append("Date,Day of Week,Working Day,Status,Clock In Time,Clock Out Time,Total Hours,Employee Name,Employee Email\n");
+            
+            // CSV Data
+            for (Map<String, Object> dayData : exportData) {
+                csvContent.append(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+                    dayData.get("date"),
+                    dayData.get("dayOfWeek"),
+                    dayData.get("isWorkingDay"),
+                    dayData.get("status"),
+                    dayData.get("clockInTime"),
+                    dayData.get("clockOutTime"),
+                    dayData.get("totalHours"),
+                    dayData.get("userName"),
+                    dayData.get("userEmail")
+                ));
+            }
+            
+            // Set response headers for CSV download
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("text/csv"));
+            headers.setContentDispositionFormData("attachment", 
+                String.format("attendance_%s_%d_%02d.csv", user.getName().replaceAll("\\s+", "_"), year, month));
+            
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(csvContent.toString());
+                    
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                "success", false,
+                "error", e.getMessage()
+            ));
+        } catch (Exception e) {
+            logger.error("Error exporting attendance for user {}: {}", userId, e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                "success", false,
+                "error", "Failed to export attendance data"
+            ));
+        }
+    }
+
+    // Export user attendance data as Excel file
+    @GetMapping("/users/{userId}/attendance/export/excel")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> exportUserAttendanceExcel(
+            @PathVariable Long userId,
+            @RequestParam int year,
+            @RequestParam int month) {
+        try {
+            // Verify user exists
+            User user = userService.findById(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+
+            // Get detailed attendance data for export
+            List<Map<String, Object>> exportData = userService.getUserAttendanceForExport(userId, year, month);
+            
+            // Generate Excel content
+            byte[] excelContent = generateExcelFile(exportData, user.getName(), year, month);
+            
+            // Set response headers for Excel download
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+            headers.setContentDispositionFormData("attachment", 
+                String.format("attendance_%s_%d_%02d.xlsx", user.getName().replaceAll("\\s+", "_"), year, month));
+            
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(excelContent);
+                    
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                "success", false,
+                "error", e.getMessage()
+            ));
+        } catch (Exception e) {
+            logger.error("Error exporting Excel attendance for user {}: {}", userId, e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                "success", false,
+                "error", "Failed to export Excel attendance data"
+            ));
+        }
+    }
+
+    private byte[] generateExcelFile(List<Map<String, Object>> exportData, String userName, int year, int month) throws Exception {
+        // Create workbook and worksheet
+        org.apache.poi.xssf.usermodel.XSSFWorkbook workbook = new org.apache.poi.xssf.usermodel.XSSFWorkbook();
+        org.apache.poi.xssf.usermodel.XSSFSheet sheet = workbook.createSheet("Attendance Report");
+        
+        // Create header style
+        org.apache.poi.ss.usermodel.CellStyle headerStyle = workbook.createCellStyle();
+        org.apache.poi.ss.usermodel.Font headerFont = workbook.createFont();
+        headerFont.setBold(true);
+        headerFont.setColor(org.apache.poi.ss.usermodel.IndexedColors.WHITE.getIndex());
+        headerStyle.setFont(headerFont);
+        headerStyle.setFillForegroundColor(org.apache.poi.ss.usermodel.IndexedColors.DARK_BLUE.getIndex());
+        headerStyle.setFillPattern(org.apache.poi.ss.usermodel.FillPatternType.SOLID_FOREGROUND);
+        headerStyle.setBorderBottom(org.apache.poi.ss.usermodel.BorderStyle.THIN);
+        headerStyle.setBorderTop(org.apache.poi.ss.usermodel.BorderStyle.THIN);
+        headerStyle.setBorderRight(org.apache.poi.ss.usermodel.BorderStyle.THIN);
+        headerStyle.setBorderLeft(org.apache.poi.ss.usermodel.BorderStyle.THIN);
+        
+        // Create title row
+        org.apache.poi.ss.usermodel.Row titleRow = sheet.createRow(0);
+        org.apache.poi.ss.usermodel.Cell titleCell = titleRow.createCell(0);
+        titleCell.setCellValue(String.format("Attendance Report - %s (%d-%02d)", userName, year, month));
+        
+        // Create header row
+        org.apache.poi.ss.usermodel.Row headerRow = sheet.createRow(2);
+        String[] headers = {"Date", "Day of Week", "Working Day", "Status", "Clock In Time", "Clock Out Time", "Total Hours"};
+        
+        for (int i = 0; i < headers.length; i++) {
+            org.apache.poi.ss.usermodel.Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headers[i]);
+            cell.setCellStyle(headerStyle);
+        }
+        
+        // Add data rows
+        int rowNum = 3;
+        for (Map<String, Object> dayData : exportData) {
+            org.apache.poi.ss.usermodel.Row row = sheet.createRow(rowNum++);
+            
+            row.createCell(0).setCellValue(dayData.get("date").toString());
+            row.createCell(1).setCellValue(dayData.get("dayOfWeek").toString());
+            row.createCell(2).setCellValue(dayData.get("isWorkingDay").toString());
+            row.createCell(3).setCellValue(dayData.get("status").toString());
+            row.createCell(4).setCellValue(dayData.get("clockInTime").toString());
+            row.createCell(5).setCellValue(dayData.get("clockOutTime").toString());
+            row.createCell(6).setCellValue(dayData.get("totalHours").toString());
+        }
+        
+        // Auto-size columns
+        for (int i = 0; i < headers.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+        
+        // Convert to byte array
+        java.io.ByteArrayOutputStream outputStream = new java.io.ByteArrayOutputStream();
+        workbook.write(outputStream);
+        workbook.close();
+        
+        return outputStream.toByteArray();
     }
 
     // Endpoint to toggle user status (activate/deactivate)

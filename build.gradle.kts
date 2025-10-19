@@ -41,6 +41,14 @@ dependencies {
 
     // Or for MySQL:
     runtimeOnly("com.mysql:mysql-connector-j")
+    
+    // Apache POI for Excel export
+    implementation("org.apache.poi:poi:5.2.4")
+    implementation("org.apache.poi:poi-ooxml:5.2.4")
+    
+    // iText for PDF generation
+    implementation("com.itextpdf:itext7-core:7.2.5")
+    implementation("com.itextpdf:html2pdf:4.0.5")
 }
 
 tasks.test {

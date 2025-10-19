@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AttendanceCalendar from './AttendanceCalendar';
+import GeneratePayslipModal from '../payslips/GeneratePayslipModal';
 
 const UserDetails = () => {
   const navigate = useNavigate();
@@ -10,6 +11,8 @@ const UserDetails = () => {
   const [error, setError] = useState('');
   const [authorized, setAuthorized] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
+  const [showPayslipModal, setShowPayslipModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
     checkAdminAuth();
@@ -142,6 +145,12 @@ const UserDetails = () => {
             Back to Users
           </button>
           <button 
+            onClick={() => setShowPayslipModal(true)} 
+            className="btn-primary"
+          >
+            Generate Payslip
+          </button>
+          <button 
             onClick={() => navigate(`/admin/users/${userId}/edit`)} 
             className="btn-primary"
           >
@@ -251,6 +260,24 @@ const UserDetails = () => {
           )}
         </div>
       </div>
+
+      {/* Success Message */}
+      {successMessage && (
+        <div className="alert alert-success" style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 1000 }}>
+          {successMessage}
+          <button onClick={() => setSuccessMessage('')}>&times;</button>
+        </div>
+      )}
+
+      {/* Payslip Generation Modal */}
+      {user && (
+        <GeneratePayslipModal
+          user={user}
+          isOpen={showPayslipModal}
+          onClose={() => setShowPayslipModal(false)}
+          onSuccess={setSuccessMessage}
+        />
+      )}
     </div>
   );
 };

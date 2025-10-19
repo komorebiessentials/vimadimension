@@ -3,6 +3,8 @@
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !gradle/wrapper/gradle-wrapper.properties
+!build/libs/*-SNAPSHOT.jar
+!build/libs/*-SNAPSHOT-plain.jar
 
 # Frontend
 frontend/build/
@@ -75,6 +77,8 @@ mysql-data/
 # Build artifacts (already covered above, but explicit)
 .gradle/
 build/
+!build/libs/*-SNAPSHOT.jar
+!build/libs/*-SNAPSHOT-plain.jar
 out/
 target/
 

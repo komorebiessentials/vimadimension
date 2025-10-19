@@ -112,6 +112,7 @@ public class ApiAuthController {
                 userInfo.put("name", user.getName());
                 userInfo.put("email", user.getEmail());
                 userInfo.put("enabled", user.isEnabled());
+                userInfo.put("organizationId", user.getOrganization() != null ? user.getOrganization().getId() : null);
                 userInfo.put("organizationName", user.getOrganization() != null ? user.getOrganization().getName() : null);
                 userInfo.put("designation", user.getDesignation());
                 userInfo.put("specialization", user.getSpecialization());

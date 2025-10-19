@@ -57,6 +57,19 @@ public class User {
     @Column(columnDefinition = "TEXT")
     private String bio; // A short professional biography, can be nullable
 
+    // Salary-related fields
+    @Column(name = "daily_salary", precision = 15, scale = 2)
+    private java.math.BigDecimal dailySalary; // Daily salary rate
+
+    @Column(name = "overtime_rate", precision = 15, scale = 2)
+    private java.math.BigDecimal overtimeRate; // Overtime rate per hour
+
+    @Column(name = "tax_rate", precision = 5, scale = 2)
+    private java.math.BigDecimal taxRate = java.math.BigDecimal.ZERO; // Tax rate percentage
+
+    @Column(name = "insurance_deduction", precision = 15, scale = 2)
+    private java.math.BigDecimal insuranceDeduction = java.math.BigDecimal.ZERO; // Fixed insurance deduction
+
     // Represents projects the user is allowed to view or is involved with
     @ManyToMany(fetch = FetchType.LAZY) // Use LAZY to load only when needed
     @JoinTable(
@@ -133,6 +146,39 @@ public class User {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    // Salary-related getters and setters
+    public java.math.BigDecimal getDailySalary() {
+        return dailySalary;
+    }
+
+    public void setDailySalary(java.math.BigDecimal dailySalary) {
+        this.dailySalary = dailySalary;
+    }
+
+    public java.math.BigDecimal getOvertimeRate() {
+        return overtimeRate;
+    }
+
+    public void setOvertimeRate(java.math.BigDecimal overtimeRate) {
+        this.overtimeRate = overtimeRate;
+    }
+
+    public java.math.BigDecimal getTaxRate() {
+        return taxRate;
+    }
+
+    public void setTaxRate(java.math.BigDecimal taxRate) {
+        this.taxRate = taxRate;
+    }
+
+    public java.math.BigDecimal getInsuranceDeduction() {
+        return insuranceDeduction;
+    }
+
+    public void setInsuranceDeduction(java.math.BigDecimal insuranceDeduction) {
+        this.insuranceDeduction = insuranceDeduction;
     }
 
     public Set<Project> getAccessibleProjects() {

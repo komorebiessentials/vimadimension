@@ -27,6 +27,9 @@ const ProjectDetails = ({ user }) => {
 
   // Check if user has admin role
   const isAdmin = user?.authorities?.some(auth => auth.authority === 'ROLE_ADMIN') || false;
+  
+  // Check if user has manager role
+  const isManager = () => user?.authorities?.some(auth => auth.authority === 'ROLE_MANAGER') || false;
 
   useEffect(() => {
     let pageToLoad = page;
@@ -221,6 +224,11 @@ const ProjectDetails = ({ user }) => {
       <div className="page-header">
         <h1 className="page-title">{project.name}</h1>
         <div className="page-actions">
+          {(isAdmin || isManager()) && (
+            <Link to={`/invoices/new?projectId=${id}`} className="btn-primary">
+              Create Invoice
+            </Link>
+          )}
           {isAdmin && (
             <>
               <Link to={`/projects/${id}/edit`} className="btn-secondary">
