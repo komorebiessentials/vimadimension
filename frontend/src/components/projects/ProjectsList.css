@@ -6,23 +6,9 @@
 }
 
 /* We'll target the specific structure in ProjectsList.js */
-.projects-header-compact {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    scroll-snap-align: start;
-    padding: 2rem;
-    background: white;
-}
 
-.projects-grid,
-.data-table-container {
-    min-height: 100vh;
-    scroll-snap-align: start;
-    padding: 2rem;
-    background: #f8fafc;
-}
+
+
 
 .fade-in {
     animation: fadeIn 0.5s ease-in-out;

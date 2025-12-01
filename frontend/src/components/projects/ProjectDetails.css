@@ -1,41 +1,5 @@
-.project-details-page {
-    height: 100vh;
-    overflow-y: scroll;
-    scroll-snap-type: y mandatory;
-    scroll-behavior: smooth;
-    padding: 0;
-    /* Remove padding from container */
-}
+/* CSS cleaned up to remove conflicting scroll-snap and height styles */
 
-/* Hero Section */
-.project-hero-section {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    scroll-snap-align: start;
-    padding: 2rem;
-    background: white;
-    /* Ensure background */
-}
-
-/* Tabs Container - Make it sticky or part of the next section */
-.project-tabs-container {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: #f8fafc;
-    padding: 1rem 2rem;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-/* Tab Content */
-.project-tab-content {
-    min-height: 100vh;
-    scroll-snap-align: start;
-    padding: 2rem;
-    background: #f8fafc;
-}
 
 .fade-in {
     animation: fadeIn 0.5s ease-in-out;

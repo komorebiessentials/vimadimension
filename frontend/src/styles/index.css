@@ -1019,7 +1019,7 @@ body {
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  align-self: start;
   text-decoration: none;
   color: inherit;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);

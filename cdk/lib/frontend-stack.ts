@@ -75,6 +75,7 @@ function handler(event) {
             enableAcceptEncodingBrotli: true,
         });
 
+
         // CloudFront Distribution
         this.distribution = new cloudfront.Distribution(this, 'Distribution', {
             defaultBehavior: {

@@ -3,13 +3,13 @@ import './PricingPage.css';
 import PricingPageSkeleton from './PricingPageSkeleton';
 
 const CheckIcon = () => (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M16.6666 5L7.49992 14.1667L3.33325 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
 );
 
 const CrossIcon = () => (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
 );
@@ -143,8 +143,8 @@ const PricingPage = () => {
     return (
         <div className="pricing-page fade-in">
             <div className="pricing-header">
-                <h1>Simple, transparent pricing for growing firms.</h1>
-                <p>Choose the plan that fits your practice size and needs.</p>
+                <h1>Simple, Transparent Pricing</h1>
+                <p>Start with a 15-day free trial. Upgrade as you grow. No hidden fees.</p>
 
                 <div className="billing-toggle">
                     <span
@@ -162,50 +162,49 @@ const PricingPage = () => {
                 </div>
             </div>
 
-            <div className="pricing-cards">
-                {plans.map((plan) => (
-                    <div
-                        key={plan.planId}
-                        className={`pricing-card ${plan.planName === 'Studio' ? 'popular' : ''}`}
-                    >
-                        {plan.planName === 'Studio' && (
-                            <div className="popular-badge">MOST POPULAR</div>
-                        )}
-                        <h2 className="plan-name">{plan.planName}</h2>
-                        <p className="plan-description">{plan.description}</p>
+            <div className="pricing-preview-grid">
+                {/* Solo Plan */}
+                <div className="pricing-preview-card">
+                    <h3 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#0f172a', margin: '0 0 0.5rem 0', letterSpacing: '-0.02em' }}>Solo</h3>
+                    <div className="price" style={{ fontSize: '3rem', fontWeight: '800', color: '#0f172a', margin: '1rem 0', lineHeight: '1', letterSpacing: '-0.02em' }}>₹99<span style={{ fontSize: '1rem', fontWeight: '500', color: '#64748b', marginLeft: '4px' }}>/user/mo</span></div>
+                    <p style={{ color: '#64748b', fontSize: '1rem', lineHeight: '1.5', margin: '0', marginBottom: '10px' }}>Perfect for freelancers just starting out.</p>
+                    <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '20px' }}>+ 18% GST</p>
+                    <ul style={{ listStyle: 'none', padding: 0, textAlign: 'left', margin: '2rem 0', width: '100%' }}>
+                        <li style={{ marginBottom: '1rem', color: '#334155', fontWeight: '500', fontSize: '0.95rem', display: 'flex', alignItems: 'center' }}><CheckIcon /> 1 User</li>
+                        <li style={{ marginBottom: '1rem', color: '#334155', fontWeight: '500', fontSize: '0.95rem', display: 'flex', alignItems: 'center' }}><CheckIcon /> 3 Active Projects</li>
+                        <li style={{ marginBottom: '1rem', color: '#334155', fontWeight: '500', fontSize: '0.95rem', display: 'flex', alignItems: 'center' }}><CheckIcon /> Basic Task Boards</li>
+                    </ul>
+                    <button onClick={() => console.log('Selected Solo')} className="btn-outline" style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '2px solid #4f46e5', color: '#4f46e5', background: 'transparent', fontWeight: '600', cursor: 'pointer', marginTop: 'auto' }}>Start 15-Day Free Trial</button>
+                </div>
 
-                        <div className="plan-price">
-                            <span className="price-amount">{getMonthlyPrice(plan)}</span>
-                            <span className="price-period"> / user / mo</span>
-                            {isAnnual && <div className="gst-note">billed annually</div>}
-                            <span className="gst-note">+ 18% GST</span>
-                        </div>
+                {/* Studio Plan */}
+                <div className="pricing-preview-card popular">
+                    <div style={{ background: '#4f46e5', color: 'white', padding: '5px 15px', borderRadius: '20px', display: 'inline-block', marginBottom: '15px', fontSize: '0.8rem', fontWeight: 'bold' }}>MOST POPULAR</div>
+                    <h3 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#0f172a', margin: '0 0 0.5rem 0', letterSpacing: '-0.02em' }}>Studio</h3>
+                    <div className="price" style={{ fontSize: '3rem', fontWeight: '800', color: '#0f172a', margin: '1rem 0', lineHeight: '1', letterSpacing: '-0.02em' }}>₹499<span style={{ fontSize: '1rem', fontWeight: '500', color: '#64748b', marginLeft: '4px' }}>/user/mo</span></div>
+                    <p style={{ color: '#64748b', fontSize: '1rem', lineHeight: '1.5', margin: '0', marginBottom: '10px' }}>For growing teams needing financial insights.</p>
+                    <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '20px' }}>+ 18% GST</p>
+                    <ul style={{ listStyle: 'none', padding: 0, textAlign: 'left', margin: '2rem 0', width: '100%' }}>
+                        <li style={{ marginBottom: '1rem', color: '#334155', fontWeight: '500', fontSize: '0.95rem', display: 'flex', alignItems: 'center' }}><CheckIcon /> Unlimited Projects</li>
+                        <li style={{ marginBottom: '1rem', color: '#334155', fontWeight: '500', fontSize: '0.95rem', display: 'flex', alignItems: 'center' }}><CheckIcon /> Financial Dashboard</li>
+                        <li style={{ marginBottom: '1rem', color: '#334155', fontWeight: '500', fontSize: '0.95rem', display: 'flex', alignItems: 'center' }}><CheckIcon /> Team Collaboration</li>
+                    </ul>
+                    <button onClick={() => console.log('Selected Studio')} className="btn-primary" style={{ width: '100%', padding: '12px', borderRadius: '6px', border: 'none', background: '#4f46e5', color: 'white', fontWeight: '600', cursor: 'pointer', marginTop: 'auto' }}>Start 15-Day Free Trial</button>
+                </div>
 
-                        <ul className="plan-features">
-                            {getFeatures(plan.planName).length > 0 ? (
-                                getFeatures(plan.planName).map((feature, idx) => (
-                                    <li key={idx} className="feature-item">
-                                        <span className={`feature-icon ${feature.included ? 'feature-included' : 'feature-excluded'}`}>
-                                            {feature.included ? <CheckIcon /> : <CrossIcon />}
-                                        </span>
-                                        <span className={`feature-text ${!feature.included ? 'excluded' : ''}`}>
-                                            {feature.text}
-                                        </span>
-                                    </li>
-                                ))
-                            ) : (
-                                <li className="feature-item">No features available</li>
-                            )}
-                        </ul>
-
-                        <button
-                            className={`plan-cta ${plan.planName === 'Studio' ? 'btn-primary' : 'btn-outline'}`}
-                            onClick={() => console.log(`Selected plan: ${plan.planName}, Billing: ${isAnnual ? 'Annual' : 'Monthly'}`)}
-                        >
-                            {plan.planName === 'Firm' ? 'Contact Sales' : 'Start 15-Day Free Trial'}
-                        </button>
-                    </div>
-                ))}
+                {/* Firm Plan */}
+                <div className="pricing-preview-card">
+                    <h3 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#0f172a', margin: '0 0 0.5rem 0', letterSpacing: '-0.02em' }}>Firm</h3>
+                    <div className="price" style={{ fontSize: '3rem', fontWeight: '800', color: '#0f172a', margin: '1rem 0', lineHeight: '1', letterSpacing: '-0.02em' }}>₹399<span style={{ fontSize: '1rem', fontWeight: '500', color: '#64748b', marginLeft: '4px' }}>/user/mo</span></div>
+                    <p style={{ color: '#64748b', fontSize: '1rem', lineHeight: '1.5', margin: '0', marginBottom: '10px' }}>Volume pricing for established teams (5+ users).</p>
+                    <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '20px' }}>+ 18% GST</p>
+                    <ul style={{ listStyle: 'none', padding: 0, textAlign: 'left', margin: '2rem 0', width: '100%' }}>
+                        <li style={{ marginBottom: '1rem', color: '#334155', fontWeight: '500', fontSize: '0.95rem', display: 'flex', alignItems: 'center' }}><CheckIcon /> Volume Discount</li>
+                        <li style={{ marginBottom: '1rem', color: '#334155', fontWeight: '500', fontSize: '0.95rem', display: 'flex', alignItems: 'center' }}><CheckIcon /> Advanced Permissions</li>
+                        <li style={{ marginBottom: '1rem', color: '#334155', fontWeight: '500', fontSize: '0.95rem', display: 'flex', alignItems: 'center' }}><CheckIcon /> Priority Support</li>
+                    </ul>
+                    <button onClick={() => console.log('Selected Firm')} className="btn-outline" style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '2px solid #4f46e5', color: '#4f46e5', background: 'transparent', fontWeight: '600', cursor: 'pointer', marginTop: 'auto' }}>Contact Sales</button>
+                </div>
             </div>
 
             <div className="faq-section">
