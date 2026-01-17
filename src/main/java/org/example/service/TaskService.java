@@ -215,7 +215,7 @@ public class TaskService {
     }
 
     public Optional<Task> findTaskById(Long taskId) {
-        return taskRepository.findById(taskId);
+        return taskRepository.findByIdWithDetails(taskId);
     }
 
     public List<Task> getAllTasks() {
@@ -287,17 +287,33 @@ public class TaskService {
             throw new IllegalArgumentException("Project with ID " + projectId + " not found.");
         }
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("updatedAt").descending());
-        Page<Task> taskPage = taskRepository.findByProjectId(projectId, pageable);
+        // Use eager fetch query to load all related entities and avoid LazyInitializationException
+        List<Task> allTasks = taskRepository.findByProjectIdWithDetails(projectId);
+        
+        // Sort by updatedAt descending
+        allTasks.sort((t1, t2) -> {
+            if (t1.getUpdatedAt() == null && t2.getUpdatedAt() == null) return 0;
+            if (t1.getUpdatedAt() == null) return 1;
+            if (t2.getUpdatedAt() == null) return -1;
+            return t2.getUpdatedAt().compareTo(t1.getUpdatedAt());
+        });
+        
+        // Manual pagination
+        int totalItems = allTasks.size();
+        int totalPages = (int) Math.ceil((double) totalItems / size);
+        int fromIndex = page * size;
+        int toIndex = Math.min(fromIndex + size, totalItems);
+        
+        List<Task> pagedTasks = (fromIndex < totalItems) ? allTasks.subList(fromIndex, toIndex) : List.of();
 
         Map<String, Object> response = new HashMap<>();
-        response.put("tasks", taskPage.getContent());
-        response.put("currentPage", taskPage.getNumber());
-        response.put("pageSize", taskPage.getSize());
-        response.put("totalItems", taskPage.getTotalElements());
-        response.put("totalPages", taskPage.getTotalPages());
-        response.put("hasNext", taskPage.hasNext());
-        response.put("hasPrevious", taskPage.hasPrevious());
+        response.put("tasks", pagedTasks);
+        response.put("currentPage", page);
+        response.put("pageSize", size);
+        response.put("totalItems", totalItems);
+        response.put("totalPages", totalPages);
+        response.put("hasNext", page < totalPages - 1);
+        response.put("hasPrevious", page > 0);
         return response;
     }
 

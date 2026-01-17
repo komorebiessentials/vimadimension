@@ -85,7 +85,7 @@ export class BackendStack extends cdk.Stack {
 
         // ==================== DOCKER IMAGE ====================
         // Dynamic ECR URI based on current account and region
-        const imageUri = `${this.account}.dkr.ecr.${this.region}.amazonaws.com/cdk-hnb659fds-container-assets-${this.account}-${this.region}:v20260117-fix-lazy`;
+        const imageUri = `${this.account}.dkr.ecr.${this.region}.amazonaws.com/cdk-hnb659fds-container-assets-${this.account}-${this.region}:v20260117-fix-lazy-v2`;
 
         // ==================== AMI ====================
         const ami = new ec2.AmazonLinuxImage({

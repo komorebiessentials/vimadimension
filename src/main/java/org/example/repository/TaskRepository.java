@@ -28,6 +28,17 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     Page<Task> findByCheckedByAndStatusIn(User checkedBy, List<TaskStatus> statuses, Pageable pageable);
     List<Task> findByProjectId(Long projectId); 
     Page<Task> findByProjectId(Long projectId, Pageable pageable);
+    
+    // Find tasks by project ID with eager loading of all related entities
+    @org.springframework.data.jpa.repository.Query("SELECT DISTINCT t FROM Task t " +
+        "LEFT JOIN FETCH t.project p " +
+        "LEFT JOIN FETCH t.assignee " +
+        "LEFT JOIN FETCH t.reporter " +
+        "LEFT JOIN FETCH t.checkedBy " +
+        "LEFT JOIN FETCH t.phase " +
+        "WHERE t.project.id = :projectId")
+    List<Task> findByProjectIdWithDetails(@org.springframework.data.repository.query.Param("projectId") Long projectId);
+    
     boolean existsByProjectId(Long projectId);
     
     // Organization-based queries
@@ -40,8 +51,14 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     
     // Unified query for filtered tasks with organization, assignee, reporter, and checkedBy filters
     // Properly handles NULL entity relationships and empty lists
-    @org.springframework.data.jpa.repository.Query("SELECT t FROM Task t WHERE " +
-        "t.project.organization.id = :organizationId AND " +
+    // Uses LEFT JOIN FETCH for eager loading to prevent LazyInitializationException
+    @org.springframework.data.jpa.repository.Query("SELECT DISTINCT t FROM Task t " +
+        "LEFT JOIN FETCH t.project p " +
+        "LEFT JOIN FETCH t.assignee " +
+        "LEFT JOIN FETCH t.reporter " +
+        "LEFT JOIN FETCH t.checkedBy " +
+        "LEFT JOIN FETCH t.phase " +
+        "WHERE p.organization.id = :organizationId AND " +
         "(:assigneeId IS NULL OR (t.assignee IS NOT NULL AND t.assignee.id = :assigneeId)) AND " +
         "(:reporterId IS NULL OR (t.reporter IS NOT NULL AND t.reporter.id = :reporterId)) AND " +
         "(:checkedById IS NULL OR (t.checkedBy IS NOT NULL AND t.checkedBy.id = :checkedById)) AND " +
@@ -58,4 +75,15 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
         @org.springframework.data.repository.query.Param("projectId") Long projectId,
         Pageable pageable
     );
+
+    // Find task by ID with all related entities eagerly loaded
+    @org.springframework.data.jpa.repository.Query("SELECT t FROM Task t " +
+        "LEFT JOIN FETCH t.project p " +
+        "LEFT JOIN FETCH p.client " +
+        "LEFT JOIN FETCH t.assignee " +
+        "LEFT JOIN FETCH t.reporter " +
+        "LEFT JOIN FETCH t.checkedBy " +
+        "LEFT JOIN FETCH t.phase " +
+        "WHERE t.id = :id")
+    java.util.Optional<Task> findByIdWithDetails(@org.springframework.data.repository.query.Param("id") Long id);
 }

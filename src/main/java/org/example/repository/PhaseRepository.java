@@ -13,7 +13,7 @@ import java.util.List;
 public interface PhaseRepository extends JpaRepository<Phase, Long> {
     List<Phase> findByProjectId(Long projectId);
 
-    @Query("SELECT DISTINCT p FROM Phase p LEFT JOIN FETCH p.substages WHERE p.project.id = :projectId")
+    @Query("SELECT DISTINCT p FROM Phase p LEFT JOIN FETCH p.substages s LEFT JOIN FETCH s.completedBy WHERE p.project.id = :projectId")
     List<Phase> findByProjectIdWithSubstages(@Param("projectId") Long projectId);
 
     List<Phase> findByProjectIdAndStatus(Long projectId, PhaseStatus status);
