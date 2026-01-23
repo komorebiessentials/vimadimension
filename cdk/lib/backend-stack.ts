@@ -237,7 +237,7 @@ PYEOF
         // });
 
         // ==================== EC2 INSTANCE ====================
-        this.instance = new ec2.Instance(this, 'BackendInstanceFinal', {
+        this.instance = new ec2.Instance(this, 'BackendInstance', {
             vpc: props.vpc,
             vpcSubnets: {
                 subnetType: ec2.SubnetType.PUBLIC,
