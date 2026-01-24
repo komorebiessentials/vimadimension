@@ -15,9 +15,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-// DISABLED: Temporarily disabled until project_attachments table exists
-// @RestController
-// @RequestMapping("/api/projects/{projectId}/attachments")
+@RestController
+@RequestMapping("/api/projects/{projectId}/attachments")
 public class ProjectAttachmentController {
 
     @Autowired

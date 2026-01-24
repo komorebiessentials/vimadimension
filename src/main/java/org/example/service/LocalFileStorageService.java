@@ -123,6 +123,11 @@ public class LocalFileStorageService implements FileStorageService {
         }
 
         String relativePath = fileUrl.replace(baseUrl + "/", "");
+        try {
+            relativePath = java.net.URLDecoder.decode(relativePath, java.nio.charset.StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            // If decoding fails, use as-is
+        }
         Path filePath = rootLocation.resolve(relativePath).normalize();
 
         return filePath.startsWith(rootLocation) && Files.exists(filePath);
@@ -136,6 +141,8 @@ public class LocalFileStorageService implements FileStorageService {
             }
 
             String relativePath = fileUrl.replace(baseUrl + "/", "");
+            // URL decode to handle spaces and special characters
+            relativePath = java.net.URLDecoder.decode(relativePath, java.nio.charset.StandardCharsets.UTF_8);
             Path filePath = rootLocation.resolve(relativePath).normalize();
 
             // Security check

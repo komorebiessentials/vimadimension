@@ -50,26 +50,20 @@ public class ProjectService {
     private final ClientRepository clientRepository;
     private final AuditService auditService;
     private final PhaseService phaseService;
-    // DISABLED: Temporarily disabled until project_attachments table exists
-    // private org.example.repository.ProjectAttachmentRepository projectAttachmentRepository;
+    private final org.example.repository.ProjectAttachmentRepository projectAttachmentRepository;
     private final FileStorageService fileStorageService;
 
     @Autowired
-    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository, TaskRepository taskRepository, ClientRepository clientRepository, AuditService auditService, PhaseService phaseService, FileStorageService fileStorageService) {
+    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository, TaskRepository taskRepository, ClientRepository clientRepository, AuditService auditService, PhaseService phaseService, FileStorageService fileStorageService, org.example.repository.ProjectAttachmentRepository projectAttachmentRepository) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
-        this.taskRepository = taskRepository; // Initialize TaskRepository
+        this.taskRepository = taskRepository;
         this.clientRepository = clientRepository;
         this.auditService = auditService;
         this.phaseService = phaseService;
         this.fileStorageService = fileStorageService;
+        this.projectAttachmentRepository = projectAttachmentRepository;
     }
-
-    // DISABLED: Optional setter for when the repository is enabled
-    // @Autowired(required = false)
-    // public void setProjectAttachmentRepository(org.example.repository.ProjectAttachmentRepository projectAttachmentRepository) {
-    //     this.projectAttachmentRepository = projectAttachmentRepository;
-    // }
 
     private User getCurrentAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -757,17 +751,15 @@ public class ProjectService {
         return team;
     }
 
-    // ========== DISABLED: Project Attachment Methods ==========
-    // TODO: Re-enable when project_attachments table is created in production
-    
-    /*
+    // ========== Project Attachment Methods ==========
+
     @Transactional(readOnly = true)
     public List<org.example.models.ProjectAttachment> getAttachments(Long projectId) {
         Project project = projectRepository.findById(projectId)
              .orElseThrow(() -> new IllegalArgumentException("Project not found"));
         
         User currentUser = getCurrentAuthenticatedUser();
-        if (!project.getOrganization().equals(currentUser.getOrganization())) {
+        if (!project.getOrganization().getId().equals(currentUser.getOrganization().getId())) {
              throw new org.springframework.security.access.AccessDeniedException("Access denied");
         }
 
@@ -780,7 +772,7 @@ public class ProjectService {
                 .orElseThrow(() -> new IllegalArgumentException("Project not found"));
         
         // Security Check: Uploader must be in same org
-        if (!project.getOrganization().equals(uploader.getOrganization())) {
+        if (!project.getOrganization().getId().equals(uploader.getOrganization().getId())) {
              throw new org.springframework.security.access.AccessDeniedException("User cannot upload to project in another organization");
         }
 
@@ -830,7 +822,7 @@ public class ProjectService {
         }
 
         User currentUser = getCurrentAuthenticatedUser(); 
-        if (!attachment.getProject().getOrganization().equals(currentUser.getOrganization())) {
+        if (!attachment.getProject().getOrganization().getId().equals(currentUser.getOrganization().getId())) {
              throw new org.springframework.security.access.AccessDeniedException("Access denied");
         }
 
@@ -841,6 +833,7 @@ public class ProjectService {
         projectAttachmentRepository.delete(attachment);
     }
 
+    @Transactional(readOnly = true)
     public String generatePresignedDownloadUrl(Long projectId, Long attachmentId) {
          org.example.models.ProjectAttachment attachment = projectAttachmentRepository.findById(attachmentId)
                 .orElseThrow(() -> new IllegalArgumentException("Attachment not found"));
@@ -851,11 +844,10 @@ public class ProjectService {
          
          // Verify user access (current user)
          User currentUser = getCurrentAuthenticatedUser(); 
-         if (!attachment.getProject().getOrganization().equals(currentUser.getOrganization())) {
+         if (!attachment.getProject().getOrganization().getId().equals(currentUser.getOrganization().getId())) {
               throw new org.springframework.security.access.AccessDeniedException("Access denied");
          }
 
          return fileStorageService.generatePresignedDownloadUrl("/api/files/" + attachment.getFileUrl());
     }
-    */
 }

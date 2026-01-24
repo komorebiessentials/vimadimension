@@ -23,7 +23,20 @@ import {
   FileUp,
   File,
   Trash2,
-  Download
+  Download,
+  Map,
+  LayoutGrid,
+  Building2,
+  Layers,
+  Zap,
+  Droplet,
+  Wind,
+  Flame,
+  Trees,
+  Armchair,
+  FileText,
+  FileCheck,
+  Presentation
 } from 'lucide-react';
 import AuditLogList from '../common/AuditLogList';
 import TeamRoster from './TeamRoster';
@@ -158,6 +171,28 @@ const TaskModal = ({ task, onClose, onSave }) => {
       </div>
     </div>
   );
+};
+
+// Helper function to get icon based on drawing type
+const getDrawingTypeIcon = (drawingType) => {
+  const iconProps = { size: 16 };
+  switch (drawingType) {
+    case 'SITE_PLAN': return <Map {...iconProps} />;
+    case 'FLOOR_PLAN': return <LayoutGrid {...iconProps} />;
+    case 'ELEVATION': return <Building2 {...iconProps} />;
+    case 'SECTION': return <Layers {...iconProps} />;
+    case 'STRUCTURAL': return <LayoutGrid {...iconProps} />;
+    case 'ELECTRICAL': return <Zap {...iconProps} />;
+    case 'PLUMBING': return <Droplet {...iconProps} />;
+    case 'HVAC': return <Wind {...iconProps} />;
+    case 'FIRE_FIGHTING': return <Flame {...iconProps} />;
+    case 'LANDSCAPE': return <Trees {...iconProps} />;
+    case 'INTERIOR': return <Armchair {...iconProps} />;
+    case 'WORKING': return <FileText {...iconProps} />;
+    case 'SUBMISSION': return <FileCheck {...iconProps} />;
+    case 'PRESENTATION': return <Presentation {...iconProps} />;
+    default: return <File {...iconProps} />;
+  }
 };
 
 const DocumentUploadModal = ({ files, onClose, onUpload, projectStage }) => {
@@ -312,6 +347,8 @@ const ProjectDetails = ({ user }) => {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [selectedUploadFiles, setSelectedUploadFiles] = useState(null);
   const fileInputRef = useRef(null);
+  const [drawingsFilterStage, setDrawingsFilterStage] = useState('');
+  const [drawingsFilterType, setDrawingsFilterType] = useState('');
 
   // Column Resizing State
   const [columnWidths, setColumnWidths] = useState({
@@ -1160,6 +1197,13 @@ const ProjectDetails = ({ user }) => {
             Overview
           </button>
           <button
+            className={`project-tab-modern ${activeTab === 'drawings' ? 'active' : ''}`}
+            onClick={() => setActiveTab('drawings')}
+          >
+            <File size={16} />
+            Drawings
+          </button>
+          <button
             className={`project-tab-modern ${activeTab === 'deliverables' ? 'active' : ''}`}
             onClick={() => setActiveTab('deliverables')}
           >
@@ -1180,16 +1224,6 @@ const ProjectDetails = ({ user }) => {
             <Kanban size={16} />
             Board
           </button>
-
-          {/*
-          <button
-            className={`project-tab-modern ${activeTab === 'drawings' ? 'active' : ''}`}
-            onClick={() => setActiveTab('drawings')}
-          >
-            <File size={16} />
-            Drawings
-          </button>
-*/}
           <button
             className={`project-tab-modern ${activeTab === 'contacts' ? 'active' : ''}`}
             onClick={() => setActiveTab('contacts')}
@@ -1841,17 +1875,57 @@ const ProjectDetails = ({ user }) => {
             {/* Header & Upload Button */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
               <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#0f172a', margin: 0 }}>Drawings & Documents</h3>
-              <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                {/* Stage Filter */}
+                <select
+                  value={drawingsFilterStage}
+                  onChange={(e) => setDrawingsFilterStage(e.target.value)}
+                  style={{
+                    padding: '8px 12px',
+                    borderRadius: '6px',
+                    border: '1px solid #e2e8f0',
+                    fontSize: '0.875rem',
+                    color: '#334155',
+                    background: 'white',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <option value="">All Stages</option>
+                  {PROJECT_STAGES.map(stage => (
+                    <option key={stage.value} value={stage.value}>{stage.label}</option>
+                  ))}
+                </select>
+
+                {/* Type Filter */}
+                <select
+                  value={drawingsFilterType}
+                  onChange={(e) => setDrawingsFilterType(e.target.value)}
+                  style={{
+                    padding: '8px 12px',
+                    borderRadius: '6px',
+                    border: '1px solid #e2e8f0',
+                    fontSize: '0.875rem',
+                    color: '#334155',
+                    background: 'white',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <option value="">All Types</option>
+                  {DRAWING_TYPES.map(type => (
+                    <option key={type.value} value={type.value}>{type.label}</option>
+                  ))}
+                </select>
+
                 <input
                   type="file"
                   id="project-file-upload"
                   multiple
-                  ref={fileInputRef} // ADDED REF
+                  ref={fileInputRef}
                   style={{ display: 'none' }}
-                  onChange={handleDrawingsFileLocalSelect} // CHANGED HANDLER
+                  onChange={handleDrawingsFileLocalSelect}
                 />
                 <button
-                  onClick={triggerDrawingsInput} // CHANGED HANDLER
+                  onClick={triggerDrawingsInput}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -1877,83 +1951,100 @@ const ProjectDetails = ({ user }) => {
             <div className="drawings-list">
               {/* ... */}
 
-              <h4 style={{ fontSize: '1rem', fontWeight: 600, color: '#334155', marginBottom: '1rem' }}>
-                All Drawings {attachments.length > 0 && <span style={{ color: '#94a3b8', fontWeight: 400 }}>({attachments.length})</span>}
-              </h4>
+              {(() => {
+                const filteredAttachments = attachments.filter(file => {
+                  if (drawingsFilterStage && file.stage !== drawingsFilterStage) return false;
+                  if (drawingsFilterType && file.drawingType !== drawingsFilterType) return false;
+                  return true;
+                });
+                return (
+                  <>
+                    <h4 style={{ fontSize: '1rem', fontWeight: 600, color: '#334155', marginBottom: '1rem' }}>
+                      All Drawings {filteredAttachments.length > 0 && <span style={{ color: '#94a3b8', fontWeight: 400 }}>({filteredAttachments.length}{attachments.length !== filteredAttachments.length ? ` of ${attachments.length}` : ''})</span>}
+                    </h4>
 
-              {attachments.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8', background: '#f8fafc', borderRadius: '8px', border: '1px dashed #e2e8f0' }}>
-                  <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'center' }}>
-                    <div style={{ width: '48px', height: '48px', background: '#f1f5f9', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <File size={24} color="#cbd5e1" />
-                    </div>
-                  </div>
-                  <p style={{ fontWeight: 500, color: '#64748b' }}>No drawings uploaded yet</p>
-                  <p style={{ fontSize: '0.875rem' }}>Upload files to see them here</p>
-                </div>
-              ) : (
-                <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', overflow: 'hidden' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                    <thead style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                      <tr>
-                        <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: '0.75rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase' }}>Name</th>
-                        <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: '0.75rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase' }}>Uploaded By</th>
-                        <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: '0.75rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase' }}>Date</th>
-                        <th style={{ textAlign: 'right', padding: '12px 16px', fontSize: '0.75rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase' }}>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {attachments.map((file, i) => (
-                        <tr key={file.id} style={{ borderBottom: i < attachments.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
-                          <td style={{ padding: '12px 16px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                              <div style={{
-                                width: '32px', height: '32px', borderRadius: '6px', background: '#f1f5f9',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#546E7A'
-                              }}>
-                                <File size={16} />
-                              </div>
-                              <div>
-                                <div style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>
-                                  {file.originalFilename || file.name}
-                                </div>
-                                <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>{Math.round(file.size / 1024)} KB</div>
-                              </div>
-                            </div>
-                          </td>
-                          <td style={{ padding: '12px 16px', fontSize: '0.875rem', color: '#64748b' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                              {file.uploadedBy && (
-                                <>
-                                  <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#e2e8f0', fontSize: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    {file.uploadedBy.name ? file.uploadedBy.name.charAt(0) : '?'}
-                                  </div>
-                                  {file.uploadedBy.name || 'Unknown'}
-                                </>
-                              )}
-                            </div>
-                          </td>
-                          <td style={{ padding: '12px 16px', fontSize: '0.875rem', color: '#64748b' }}>
-                            {file.createdAt ? new Date(file.createdAt).toLocaleDateString() : '-'}
-                          </td>
-                          <td style={{ padding: '12px 16px', textAlign: 'right' }}>
-                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
-                              <button
-                                onClick={() => handleDownloadAttachment(file.id)}
-                                className="btn-icon-small"
-                                title="Download"
-                                style={{ color: '#64748b' }}
-                              >
-                                <Download size={16} />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
+                    {filteredAttachments.length === 0 ? (
+                      <div style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8', background: '#f8fafc', borderRadius: '8px', border: '1px dashed #e2e8f0' }}>
+                        <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'center' }}>
+                          <div style={{ width: '48px', height: '48px', background: '#f1f5f9', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <File size={24} color="#cbd5e1" />
+                          </div>
+                        </div>
+                        <p style={{ fontWeight: 500, color: '#64748b' }}>No drawings uploaded yet</p>
+                        <p style={{ fontSize: '0.875rem' }}>Upload files to see them here</p>
+                      </div>
+                    ) : (
+                      <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', overflow: 'hidden' }}>
+                        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+                          <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '600px' }}>
+                            <thead style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+                              <tr>
+                                <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: '0.75rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase' }}>Name</th>
+                                <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: '0.75rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase' }}>Type</th>
+                                <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: '0.75rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase' }}>Uploaded By</th>
+                                <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: '0.75rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase' }}>Date</th>
+                                <th style={{ textAlign: 'right', padding: '12px 16px', fontSize: '0.75rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase' }}>Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {filteredAttachments.map((file, i) => (
+                                <tr key={file.id} style={{ borderBottom: i < filteredAttachments.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
+                                  <td style={{ padding: '12px 16px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                      <div style={{
+                                        width: '32px', height: '32px', borderRadius: '6px', background: '#f1f5f9',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#546E7A'
+                                      }}>
+                                        {getDrawingTypeIcon(file.drawingType)}
+                                      </div>
+                                      <div>
+                                        <div style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>
+                                          {file.originalFilename || file.name}
+                                        </div>
+                                        <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>{Math.round(file.size / 1024)} KB</div>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td style={{ padding: '12px 16px', fontSize: '0.875rem', color: '#64748b' }}>
+                                    {file.drawingType ? (DRAWING_TYPES.find(t => t.value === file.drawingType)?.label || file.drawingType) : '-'}
+                                  </td>
+                                  <td style={{ padding: '12px 16px', fontSize: '0.875rem', color: '#64748b' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                      {file.uploadedBy && (
+                                        <>
+                                          <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#e2e8f0', fontSize: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            {file.uploadedBy.name ? file.uploadedBy.name.charAt(0) : '?'}
+                                          </div>
+                                          {file.uploadedBy.name || 'Unknown'}
+                                        </>
+                                      )}
+                                    </div>
+                                  </td>
+                                  <td style={{ padding: '12px 16px', fontSize: '0.875rem', color: '#64748b' }}>
+                                    {file.createdAt ? new Date(file.createdAt).toLocaleDateString() : '-'}
+                                  </td>
+                                  <td style={{ padding: '12px 16px', textAlign: 'right' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+                                      <button
+                                        onClick={() => handleDownloadAttachment(file.id)}
+                                        className="btn-icon-small"
+                                        title="Download"
+                                        style={{ color: '#64748b' }}
+                                      >
+                                        <Download size={16} />
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
             </div>
           </div>
         )}
@@ -1983,11 +2074,7 @@ const ProjectDetails = ({ user }) => {
       {showUploadModal && selectedUploadFiles && (
         <DocumentUploadModal
           files={selectedUploadFiles}
-          onClose={() => {
-            setShowUploadModal(false);
-            setSelectedUploadFiles(null);
-            if (fileInputRef.current) fileInputRef.current.value = "";
-          }}
+          onClose={onModalUploadComplete}
           onUpload={performDrawingsUpload}
           projectStage={project.projectStage}
         />
