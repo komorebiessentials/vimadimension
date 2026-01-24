@@ -43,6 +43,16 @@ const LandingPage = () => {
 
   const features = [
     {
+      title: 'Team Registration',
+      description: 'Seamlessly onboard new team members and manage user access.',
+      image: '/images/register.png'
+    },
+    {
+      title: 'Project Overview',
+      description: 'Get a comprehensive view of all your projects, deadlines, and team workload.',
+      image: '/images/project.png'
+    },
+    {
       title: 'Task Management',
       description: 'Organize tasks by project stages, assign to team members, and track progress in real-time.',
       image: '/images/task.png'
@@ -53,19 +63,9 @@ const LandingPage = () => {
       image: '/images/time.png'
     },
     {
-      title: 'Project Overview',
-      description: 'Get a comprehensive view of all your projects, deadlines, and team workload.',
-      image: '/images/project.png'
-    },
-    {
       title: 'Invoicing',
       description: 'Generate professional invoices based on project milestones and time logs.',
       image: '/images/invoice.png'
-    },
-    {
-      title: 'Team Registration',
-      description: 'Seamlessly onboard new team members and manage user access.',
-      image: '/images/register.png'
     },
     {
       title: 'Reports & Analytics',
