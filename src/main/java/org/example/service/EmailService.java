@@ -123,6 +123,8 @@ public class EmailService {
             logger.info("Invitation email sent to: {}", toEmail);
         } catch (Exception e) {
             logger.warn("Failed to send invitation email (check SMTP config): {}. Use the logged link above for testing.", e.getMessage());
+            // Re-throw to allow caller to handle the failure and trigger rollback
+            throw new RuntimeException("Failed to send invitation email", e);
         }
     }
 

@@ -308,7 +308,8 @@ public class AuthService {
             );
         } catch (Exception e) {
             logger.error("Failed to send invitation email: {}", e.getMessage());
-            return InvitationResult.error("Failed to send invitation email. Please try again.");
+            // Re-throw to trigger transaction rollback
+            throw new RuntimeException("Failed to send invitation email. Please check your email configuration.", e);
         }
 
         return InvitationResult.success(invitationToken.getToken(), normalizedEmail);

@@ -19,7 +19,8 @@ public interface InvitationTokenRepository extends JpaRepository<InvitationToken
     
     Optional<InvitationToken> findByEmailAndOrganizationAndUsedFalse(String email, Organization organization);
     
-    List<InvitationToken> findByOrganizationIdAndUsedFalse(Long organizationId);
+    @Query("SELECT it FROM InvitationToken it JOIN FETCH it.invitedBy WHERE it.organization.id = :organizationId AND it.used = false")
+    List<InvitationToken> findByOrganizationIdAndUsedFalse(@Param("organizationId") Long organizationId);
     
     List<InvitationToken> findByOrganizationId(Long organizationId);
     

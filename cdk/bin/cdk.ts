@@ -42,4 +42,5 @@ const backendStack = new BackendStack(app, 'BackendStack', {
 const frontendStack = new FrontendStack(app, 'FrontendStack', {
   env,
   backendDnsName: backendStack.publicDnsName,
+  // backendDnsName: 'temp.archiease.com', // Temporary unlink to fix CloudFormation export issue
 });

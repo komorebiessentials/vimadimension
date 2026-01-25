@@ -85,7 +85,7 @@ export class BackendStack extends cdk.Stack {
 
         // ==================== DOCKER IMAGE ====================
         // Dynamic ECR URI based on current account and region
-        const imageUri = `${this.account}.dkr.ecr.${this.region}.amazonaws.com/cdk-hnb659fds-container-assets-${this.account}-${this.region}:v20260124-debug-amd64`;
+        const imageUri = `${this.account}.dkr.ecr.${this.region}.amazonaws.com/cdk-hnb659fds-container-assets-${this.account}-${this.region}:v20260125-email-fix-amd64`;
 
         // ==================== AMI ====================
         const ami = new ec2.AmazonLinuxImage({
@@ -97,7 +97,7 @@ export class BackendStack extends cdk.Stack {
         const userData = ec2.UserData.forLinux();
         userData.addCommands(
             'yum update -y',
-            `echo "Deployment timestamp: ${new Date().toISOString()} - AMD64 FIX"`,
+            `echo "Deployment timestamp: ${new Date().toISOString()} - FORCE REPLACEMENT V3 FINAL"`,
             'yum install -y docker jq aws-cli',
             // ... (rest of userData commands) ...
             'service docker start',
@@ -238,7 +238,7 @@ PYEOF
         // });
 
         // ==================== EC2 INSTANCE ====================
-        this.instance = new ec2.Instance(this, 'BackendInstanceV2', {
+        this.instance = new ec2.Instance(this, 'BackendInstanceV3', {
             vpc: props.vpc,
             vpcSubnets: {
                 subnetType: ec2.SubnetType.PUBLIC,
@@ -248,6 +248,12 @@ PYEOF
             securityGroup: instanceSg,
             role: role,
             userData: userData,
+            blockDevices: [{
+                deviceName: '/dev/xvda',
+                volume: ec2.BlockDeviceVolume.ebs(10, {
+                    volumeType: ec2.EbsDeviceVolumeType.GP3,
+                }),
+            }],
             // keyName: keyPair.keyName, // Optional
         });
 
