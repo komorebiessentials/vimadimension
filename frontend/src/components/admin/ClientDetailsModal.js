@@ -208,7 +208,7 @@ const ClientDetailsModal = ({ isOpen, onClose, client, onClientUpdated }) => {
                 <button
                   type="submit"
                   className="btn-primary-modern"
-                  style={{ backgroundColor: '#546E7A', borderColor: '#546E7A' }}
+                  style={{ backgroundColor: '#0F172A', borderColor: '#0F172A' }}
                   disabled={submitting}
                 >
                   {submitting ? (
@@ -276,7 +276,7 @@ const ClientDetailsModal = ({ isOpen, onClose, client, onClientUpdated }) => {
                 </button>
                 <button
                   className="btn-primary-modern"
-                  style={{ backgroundColor: '#546E7A', borderColor: '#546E7A' }}
+                  style={{ backgroundColor: '#0F172A', borderColor: '#0F172A' }}
                   onClick={handleEdit}
                 >
                   <i className="fas fa-edit"></i> Edit Details

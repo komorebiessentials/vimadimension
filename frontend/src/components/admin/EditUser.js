@@ -321,7 +321,7 @@ const EditUser = ({ isPeopleContext = false }) => {
             <button
               type="submit"
               className="btn-primary"
-              style={{ backgroundColor: '#546E7A', border: 'none' }}
+              style={{ backgroundColor: '#0F172A', border: 'none' }}
               disabled={loading}
             >
               {loading ? 'Updating...' : 'Update Person'}

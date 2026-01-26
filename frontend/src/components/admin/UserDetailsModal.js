@@ -190,7 +190,7 @@ const UserDetailsModal = ({ isOpen, onClose, userId, isPeopleContext = false }) 
       fontWeight: '600'
     },
     salaryCard: {
-      background: 'linear-gradient(135deg, #546E7A 0%, #455A64 100%)',
+      background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
       borderRadius: '12px',
       padding: '1.5rem',
       color: 'white',
@@ -246,7 +246,7 @@ const UserDetailsModal = ({ isOpen, onClose, userId, isPeopleContext = false }) 
               }}
               style={{
                 padding: '0.625rem 1.25rem',
-                background: '#546E7A',
+                background: '#0F172A',
                 color: 'white',
                 border: 'none',
                 borderRadius: '8px',
@@ -259,12 +259,12 @@ const UserDetailsModal = ({ isOpen, onClose, userId, isPeopleContext = false }) 
                 gap: '0.5rem'
               }}
               onMouseEnter={(e) => {
-                e.target.style.backgroundColor = '#455A64';
+                e.target.style.backgroundColor = '#1E293B';
                 e.target.style.transform = 'translateY(-1px)';
-                e.target.style.boxShadow = '0 4px 6px rgba(84, 110, 122, 0.3)';
+                e.target.style.boxShadow = '0 4px 6px rgba(15, 23, 42, 0.3)';
               }}
               onMouseLeave={(e) => {
-                e.target.style.backgroundColor = '#546E7A';
+                e.target.style.backgroundColor = '#0F172A';
                 e.target.style.transform = 'none';
                 e.target.style.boxShadow = 'none';
               }}

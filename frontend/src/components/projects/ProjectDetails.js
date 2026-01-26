@@ -1760,7 +1760,7 @@ const ProjectDetails = ({ user }) => {
                               <div style={{
                                 height: '100%',
                                 width: `${status.percentage || 0}%`,
-                                background: status.allComplete ? '#22c55e' : '#546E7A',
+                                background: status.allComplete ? '#22c55e' : '#0F172A',
                                 transition: 'width 0.3s ease'
                               }} />
                             </div>
@@ -1790,7 +1790,7 @@ const ProjectDetails = ({ user }) => {
                                 onClick={(e) => { e.stopPropagation(); createDefaultSubstages(phase.id); }}
                                 style={{
                                   padding: '0.5rem 1rem',
-                                  background: '#546E7A',
+                                  background: '#0F172A',
                                   color: 'white',
                                   border: 'none',
                                   borderRadius: '6px',
@@ -1836,7 +1836,7 @@ const ProjectDetails = ({ user }) => {
                                       style={{
                                         width: '18px',
                                         height: '18px',
-                                        accentColor: '#546E7A',
+                                        accentColor: '#0F172A',
                                         cursor: 'pointer'
                                       }}
                                     />
@@ -1930,7 +1930,7 @@ const ProjectDetails = ({ user }) => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '8px',
-                    background: '#546E7A',
+                    background: '#0F172A',
                     color: 'white',
                     border: 'none',
                     borderRadius: '6px',
@@ -1993,7 +1993,7 @@ const ProjectDetails = ({ user }) => {
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                       <div style={{
                                         width: '32px', height: '32px', borderRadius: '6px', background: '#f1f5f9',
-                                        display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#546E7A'
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0F172A'
                                       }}>
                                         {getDrawingTypeIcon(file.drawingType)}
                                       </div>

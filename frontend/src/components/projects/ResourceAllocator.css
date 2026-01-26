@@ -263,7 +263,7 @@
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #546E7A, #455A64);
+    background: linear-gradient(135deg, #0F172A, #1E293B);
     color: white;
     display: flex;
     align-items: center;
@@ -334,7 +334,7 @@
 
 .phase-cell:hover .add-icon {
     opacity: 1;
-    color: #546E7A;
+    color: #0F172A;
 }
 
 .phase-cell.has-assignment {
@@ -359,7 +359,7 @@
 
 .assignment-info .cost {
     font-size: 0.625rem;
-    color: #546E7A;
+    color: #0F172A;
 }
 
 /* Modal - Compact */
@@ -438,8 +438,8 @@
 
 .form-group input:focus {
     outline: none;
-    border-color: #546E7A;
-    box-shadow: 0 0 0 2px rgba(84, 110, 122, 0.1);
+    border-color: #0F172A;
+    box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.1);
 }
 
 .form-row {
@@ -456,7 +456,7 @@
 }
 
 .btn-primary {
-    background: #546E7A;
+    background: #0F172A;
     color: white;
     padding: 0.5rem 0.875rem;
     border: none;
@@ -467,7 +467,7 @@
 }
 
 .btn-primary:hover {
-    background: #455A64;
+    background: #1E293B;
 }
 
 .btn-secondary {

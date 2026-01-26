@@ -549,7 +549,7 @@ const CreateInvoice = ({ user }) => {
                             value={item.description}
                             onChange={(e) => handleItemChange(index, 'description', e.target.value)}
                             readOnly={formData.invoiceMode === 'standard'}
-                            style={formData.invoiceMode === 'standard' ? { backgroundColor: '#f8f9fa', cursor: 'not-allowed' } : {}}
+                            style={formData.invoiceMode === 'standard' ? { backgroundColor: '#f8fafc', cursor: 'not-allowed' } : {}}
                             required
                           />
                         </div>
@@ -582,7 +582,7 @@ const CreateInvoice = ({ user }) => {
                             value={item.quantity}
                             onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
                             readOnly={formData.invoiceMode === 'standard'}
-                            style={formData.invoiceMode === 'standard' ? { backgroundColor: '#f8f9fa', cursor: 'not-allowed' } : {}}
+                            style={formData.invoiceMode === 'standard' ? { backgroundColor: '#f8fafc', cursor: 'not-allowed' } : {}}
                             required
                           />
                         </div>
@@ -597,7 +597,7 @@ const CreateInvoice = ({ user }) => {
                             value={item.unitPrice}
                             onChange={(e) => handleItemChange(index, 'unitPrice', e.target.value)}
                             readOnly={formData.invoiceMode === 'standard'}
-                            style={formData.invoiceMode === 'standard' ? { backgroundColor: '#f8f9fa', cursor: 'not-allowed' } : {}}
+                            style={formData.invoiceMode === 'standard' ? { backgroundColor: '#f8fafc', cursor: 'not-allowed' } : {}}
                             required
                           />
                         </div>

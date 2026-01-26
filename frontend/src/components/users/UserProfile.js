@@ -368,7 +368,7 @@ const UserProfile = ({ user, onUserUpdate }) => {
                   fontSize: '14px',
                   fontWeight: '500',
                   color: 'white',
-                  background: '#546E7A',
+                  background: '#0F172A',
                   border: 'none',
                   borderRadius: '24px',
                   cursor: 'pointer'

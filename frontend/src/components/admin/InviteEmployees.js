@@ -151,8 +151,8 @@ const InviteEmployees = ({ user }) => {
             padding: '1rem 1.5rem',
             background: 'none',
             border: 'none',
-            borderBottom: active ? '3px solid #546E7A' : '3px solid transparent',
-            color: active ? '#546E7A' : '#64748b',
+            borderBottom: active ? '3px solid #0F172A' : '3px solid transparent',
+            color: active ? '#0F172A' : '#64748b',
             fontWeight: active ? '600' : '500',
             cursor: 'pointer',
             fontSize: '0.95rem',
@@ -218,8 +218,8 @@ const InviteEmployees = ({ user }) => {
             lineHeight: '1.6'
         },
         textareaFocused: {
-            borderColor: '#546E7A',
-            boxShadow: '0 0 0 3px rgba(84, 110, 122, 0.1)'
+            borderColor: '#0F172A',
+            boxShadow: '0 0 0 3px rgba(15, 23, 42, 0.1)'
         },
         select: {
             width: '100%',
@@ -234,12 +234,12 @@ const InviteEmployees = ({ user }) => {
             fontFamily: 'inherit'
         },
         selectFocused: {
-            borderColor: '#546E7A',
-            boxShadow: '0 0 0 3px rgba(84, 110, 122, 0.1)'
+            borderColor: '#0F172A',
+            boxShadow: '0 0 0 3px rgba(15, 23, 42, 0.1)'
         },
         button: {
             padding: '1rem 2.5rem',
-            backgroundColor: '#546E7A',
+            backgroundColor: '#0F172A',
             color: 'white',
             border: 'none',
             borderRadius: '0.625rem',
@@ -250,12 +250,12 @@ const InviteEmployees = ({ user }) => {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '0.5rem',
-            boxShadow: '0 4px 6px -1px rgba(84, 110, 122, 0.3), 0 2px 4px -1px rgba(84, 110, 122, 0.2)'
+            boxShadow: '0 4px 6px -1px rgba(15, 23, 42, 0.3), 0 2px 4px -1px rgba(15, 23, 42, 0.2)'
         },
         buttonHover: {
-            backgroundColor: '#455A64',
+            backgroundColor: '#1E293B',
             transform: 'translateY(-1px)',
-            boxShadow: '0 6px 8px -1px rgba(84, 110, 122, 0.4), 0 4px 6px -1px rgba(84, 110, 122, 0.3)'
+            boxShadow: '0 6px 8px -1px rgba(15, 23, 42, 0.4), 0 4px 6px -1px rgba(15, 23, 42, 0.3)'
         },
         successBox: {
             padding: '1rem 1.25rem',
@@ -443,7 +443,7 @@ const InviteEmployees = ({ user }) => {
 
     const getRoleColor = (roleValue) => {
         const role = roles.find(r => r.value === roleValue);
-        return role ? role.color : '#546E7A';
+        return role ? role.color : '#0F172A';
     };
 
     return (
@@ -505,7 +505,7 @@ const InviteEmployees = ({ user }) => {
                         {pendingInvitations.length > 0 && (
                             <span style={{
                                 marginLeft: '0.5rem',
-                                backgroundColor: activeTab === 'pending' ? '#546E7A' : '#cbd5e1',
+                                backgroundColor: activeTab === 'pending' ? '#0F172A' : '#cbd5e1',
                                 color: 'white',
                                 borderRadius: '9999px',
                                 padding: '0.125rem 0.5rem',
@@ -635,9 +635,9 @@ const InviteEmployees = ({ user }) => {
                                 }}
                                 onMouseLeave={(e) => {
                                     if (!loading) {
-                                        e.target.style.backgroundColor = '#546E7A';
+                                        e.target.style.backgroundColor = '#0F172A';
                                         e.target.style.transform = 'none';
-                                        e.target.style.boxShadow = '0 4px 6px -1px rgba(84, 110, 122, 0.3), 0 2px 4px -1px rgba(84, 110, 122, 0.2)';
+                                        e.target.style.boxShadow = '0 4px 6px -1px rgba(15, 23, 42, 0.3), 0 2px 4px -1px rgba(15, 23, 42, 0.2)';
                                     }
                                 }}
                             >
@@ -715,7 +715,7 @@ const InviteEmployees = ({ user }) => {
                                 <div style={{
                                     ...styles.loadingSpinner,
                                     border: '3px solid #e2e8f0',
-                                    borderTopColor: '#546E7A',
+                                    borderTopColor: '#0F172A',
                                     width: '2rem',
                                     height: '2rem',
                                     margin: '0 auto 1rem'

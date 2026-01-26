@@ -311,7 +311,7 @@ const ResourceAllocator = ({ projectId }) => {
                         alignItems: 'center',
                         gap: '0.375rem',
                         padding: '0.5rem 0.875rem',
-                        background: '#546E7A',
+                        background: '#0F172A',
                         color: 'white',
                         borderRadius: '6px',
                         fontSize: '0.8125rem',

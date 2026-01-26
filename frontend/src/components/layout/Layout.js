@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
+import HeaderProfile from './HeaderProfile';
 import AppLauncher from '../common/AppLauncher';
 import { getOrganizationLogoProps } from '../../utils/organizationLogo';
 
@@ -96,8 +97,9 @@ const Layout = ({ user, onLogout, onUserUpdate }) => {
                         </span>
                     </div>
                 </div>
-                <div className="content-header-actions">
+                <div className="content-header-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <AppLauncher user={user} />
+                    <HeaderProfile user={user} onLogout={onLogout} onUserUpdate={onUserUpdate} />
                 </div>
             </header>
 

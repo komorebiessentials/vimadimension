@@ -261,66 +261,115 @@ const OrganizationSettings = () => {
     // Styles
     const styles = {
         container: {
-            maxWidth: '1000px',
+            maxWidth: '1200px',
             margin: '0 auto',
             padding: '2rem',
             fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         },
         header: {
-            background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+            background: 'white',
             borderRadius: '16px',
-            padding: '3rem',
-            color: 'white',
+            padding: '2rem',
             marginBottom: '2rem',
             position: 'relative',
             overflow: 'hidden',
-            boxShadow: '0 10px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.1)',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
         },
         headerContent: {
             position: 'relative',
             zIndex: 2,
         },
         headerTitle: {
-            fontSize: '2.5rem',
+            fontSize: '1.875rem',
             fontWeight: '700',
+            color: '#0f172a',
             marginBottom: '0.5rem',
             letterSpacing: '-0.025em',
-            background: 'linear-gradient(to right, #ffffff, #e2e8f0)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
         },
         headerSubtitle: {
-            color: '#94a3b8',
-            fontSize: '1.1rem',
+            color: '#64748b',
+            fontSize: '1rem',
             maxWidth: '600px',
         },
         headerDecoration: {
             position: 'absolute',
-            top: '-50%',
-            right: '-10%',
-            width: '400px',
-            height: '400px',
-            background: 'radial-gradient(circle, rgba(84, 110, 122, 0.15) 0%, rgba(84, 110, 122, 0) 70%)',
+            top: 0,
+            right: 0,
+            width: '100%',
+            height: '4px',
+            background: 'linear-gradient(90deg, #6366f1, #8b5cf6, #3b82f6)',
+        },
+        headerLogoWrapper: {
+            width: '80px',
+            height: '80px',
+            borderRadius: '16px',
+            backgroundColor: 'white',
+            padding: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+            border: '1px solid #e2e8f0'
+        },
+        headerLogo: {
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
+            borderRadius: '8px'
+        },
+        headerLogoPlaceholder: {
+            background: '#f8fafc',
+            color: '#64748b',
+            fontSize: '2rem',
+            fontWeight: '700',
+            border: '2px border #e2e8f0'
+        },
+        editButtonHeader: {
+            background: 'white',
+            border: '1px solid #e2e8f0',
+            color: '#0f172a',
+            boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        },
+        contextBanner: {
+            display: 'flex',
+            gap: '1rem',
+            padding: '1.25rem',
+            background: '#eff6ff',
+            border: '1px solid #dbeafe',
+            borderRadius: '12px',
+            marginBottom: '2rem',
+            alignItems: 'center',
+        },
+        contextBannerIcon: {
+            background: 'white',
+            padding: '0.5rem',
             borderRadius: '50%',
-            zIndex: 1,
+            color: '#2563eb',
+            boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        },
+        gridContainer: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))',
+            gap: '1.5rem',
+            marginBottom: '6rem', // Space for fixed footer
         },
         card: {
             background: 'white',
             borderRadius: '16px',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
             border: '1px solid #e2e8f0',
             overflow: 'hidden',
+            height: '100%',
         },
         cardHeader: {
-            padding: '1.5rem 2rem',
+            padding: '1.5rem',
             borderBottom: '1px solid #f1f5f9',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
             background: '#ffffff',
         },
         cardTitle: {
-            fontSize: '1.25rem',
+            fontSize: '1.1rem',
             fontWeight: '600',
             color: '#0f172a',
             display: 'flex',
@@ -328,58 +377,52 @@ const OrganizationSettings = () => {
             gap: '0.75rem',
         },
         cardBody: {
-            padding: '2rem',
-        },
-        grid: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '2rem',
+            padding: '1.5rem',
         },
         formGroup: {
-            marginBottom: '1.5rem',
+            marginBottom: '1rem',
         },
         label: {
             display: 'block',
-            fontSize: '0.875rem',
-            fontWeight: '500',
+            fontSize: '0.85rem',
+            fontWeight: '600',
+            color: '#334155',
+            marginBottom: '0.25rem',
+        },
+        helperText: {
+            fontSize: '0.75rem',
             color: '#64748b',
+            marginTop: 0,
             marginBottom: '0.5rem',
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em',
         },
         value: {
-            fontSize: '1rem',
+            fontSize: '0.95rem',
             color: '#0f172a',
             fontWeight: '500',
-            padding: '0.75rem 0',
-            borderBottom: '1px solid #f1f5f9',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.75rem',
+            padding: '0.5rem 0',
         },
         input: {
             width: '100%',
-            padding: '0.75rem 1rem',
+            padding: '0.625rem 0.875rem',
             borderRadius: '8px',
-            border: '1px solid #e2e8f0',
-            fontSize: '1rem',
+            border: '1px solid #cbd5e1',
+            fontSize: '0.9rem',
             color: '#0f172a',
             transition: 'all 0.2s',
             outline: 'none',
-            backgroundColor: '#f8fafc',
         },
         textarea: {
             width: '100%',
-            padding: '0.75rem 1rem',
+            padding: '0.625rem 0.875rem',
             borderRadius: '8px',
-            border: '1px solid #e2e8f0',
-            fontSize: '1rem',
+            border: '1px solid #cbd5e1',
+            fontSize: '0.9rem',
             color: '#0f172a',
             transition: 'all 0.2s',
             outline: 'none',
-            backgroundColor: '#f8fafc',
-            minHeight: '120px',
+            minHeight: '100px',
             resize: 'vertical',
+            lineHeight: '1.5',
         },
         button: {
             display: 'inline-flex',
@@ -394,33 +437,76 @@ const OrganizationSettings = () => {
             border: 'none',
         },
         primaryButton: {
-            background: '#546E7A',
+            background: '#0f172a',
             color: 'white',
-            boxShadow: '0 4px 6px -1px rgba(84, 110, 122, 0.2)',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
         },
         secondaryButton: {
             background: 'white',
             color: '#64748b',
             border: '1px solid #e2e8f0',
         },
+        deleteLogoButton: {
+            position: 'absolute',
+            top: '-8px',
+            right: '-8px',
+            background: '#ef4444',
+            color: 'white',
+            border: 'none',
+            borderRadius: '50%',
+            width: '24px',
+            height: '24px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '14px',
+            fontWeight: 'bold',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+        },
+        uploadBox: {
+            border: '1px dashed #cbd5e1',
+            borderRadius: '8px',
+            padding: '1rem',
+            textAlign: 'center',
+            cursor: 'pointer',
+            background: '#f8fafc',
+            transition: 'all 0.2s',
+            fontSize: '0.875rem'
+        },
         iconWrapper: {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            width: '32px',
-            height: '32px',
-            borderRadius: '8px',
+            width: '36px',
+            height: '36px',
+            borderRadius: '10px',
             background: '#f1f5f9',
             color: '#64748b',
         },
+        actionBar: {
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            background: 'white',
+            padding: '1rem 2rem',
+            borderTop: '1px solid #e2e8f0',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            gap: '1rem',
+            boxShadow: '0 -4px 6px -1px rgba(0, 0, 0, 0.05)',
+            zIndex: 100,
+        },
         alert: {
             padding: '1rem',
-            borderRadius: '8px',
+            borderRadius: '10px',
             marginBottom: '1.5rem',
             display: 'flex',
             alignItems: 'center',
             gap: '0.75rem',
             fontSize: '0.9rem',
+            fontWeight: '500',
         },
         errorAlert: {
             background: '#fef2f2',
@@ -449,61 +535,54 @@ const OrganizationSettings = () => {
             <div style={styles.header}>
                 <div style={styles.headerDecoration}></div>
                 <div style={styles.headerContent}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', flexWrap: 'wrap' }}>
                         {organization?.logoUrl && !headerLogoError ? (
-                            <div
-                                style={{
-                                    width: '80px',
-                                    height: '80px',
-                                    borderRadius: '12px',
-                                    backgroundColor: 'white',
-                                    padding: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    flexShrink: 0,
-                                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
-                                }}
-                            >
+                            <div style={styles.headerLogoWrapper}>
                                 <img
                                     src={organization.logoUrl}
                                     alt="Organization Logo"
-                                    style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        objectFit: 'contain',
-                                        borderRadius: '8px'
-                                    }}
+                                    style={styles.headerLogo}
                                     onError={() => setHeaderLogoError(true)}
                                 />
                             </div>
                         ) : (
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    width: '80px',
-                                    height: '80px',
-                                    borderRadius: '12px',
-                                    backgroundColor: 'white',
-                                    color: '#546E7A',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: '32px',
-                                    fontWeight: '700',
-                                    flexShrink: 0,
-                                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
-                                }}
-                            >
+                            <div style={{ ...styles.headerLogoWrapper, ...styles.headerLogoPlaceholder }}>
                                 {organization?.name ? getOrganizationLogoProps(null, organization.name).initials : '??'}
                             </div>
                         )}
-                        <div style={{ flex: 1 }}>
+                        <div style={{ flex: 1, minWidth: '300px' }}>
                             <h1 style={styles.headerTitle}>{organization?.name || 'Organization Settings'}</h1>
                             <p style={styles.headerSubtitle}>
-                                Manage your organization's profile, contact information, and public presence.
+                                Manage your firm's identity, legal details, and invoice settings.
                             </p>
                         </div>
+                        {!isEditing && (
+                            <button
+                                onClick={() => setIsEditing(true)}
+                                style={{ ...styles.button, ...styles.editButtonHeader }}
+                            >
+                                <EditIcon />
+                                Edit Settings
+                            </button>
+                        )}
                     </div>
+                </div>
+            </div>
+
+            {/* Context Banner */}
+            <div style={styles.contextBanner}>
+                <div style={styles.contextBannerIcon}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                </div>
+                <div>
+                    <h4 style={{ fontWeight: '600', color: '#1e40af', marginBottom: '4px' }}>Why is this important?</h4>
+                    <p style={{ color: '#1e3a8a', fontSize: '0.9rem', margin: 0 }}>
+                        The information below will be automatically used on your <strong>Invoices</strong>, <strong>Contracts</strong>, and <strong>Client Proposals</strong>. Keeping this accurate ensures professional documentation.
+                    </p>
                 </div>
             </div>
 
@@ -529,185 +608,41 @@ const OrganizationSettings = () => {
                 </div>
             )}
 
-            {/* Main Content Card */}
-            <div style={styles.card}>
-                <div style={styles.cardHeader}>
-                    <div style={styles.cardTitle}>
-                        <div style={{ ...styles.iconWrapper, background: '#eff6ff', color: '#546E7A' }}>
-                            <BuildingIcon />
-                        </div>
-                        General Information
-                    </div>
-                    {!isEditing && (
-                        <button
-                            onClick={() => setIsEditing(true)}
-                            style={{ ...styles.button, ...styles.primaryButton }}
-                            onMouseOver={(e) => e.currentTarget.style.background = '#455A64'}
-                            onMouseOut={(e) => e.currentTarget.style.background = '#546E7A'}
-                        >
-                            <EditIcon />
-                            Edit Details
-                        </button>
-                    )}
-                </div>
+            <form onSubmit={handleSubmit}>
+                <div style={styles.gridContainer}>
 
-                <form onSubmit={handleSubmit} style={styles.cardBody}>
-                    <div style={styles.grid}>
-                        {/* Organization Name */}
-                        <div style={styles.formGroup}>
-                            <label style={styles.label}>Organization Name</label>
-                            {isEditing ? (
-                                <input
-                                    type="text"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    style={styles.input}
-                                    required
-                                    placeholder="e.g. Acme Corp"
-                                />
-                            ) : (
-                                <div style={styles.value}>{organization.name}</div>
-                            )}
-                        </div>
-
-                        {/* Website */}
-                        <div style={styles.formGroup}>
-                            <label style={styles.label}>Website</label>
-                            {isEditing ? (
-                                <div style={{ position: 'relative' }}>
-                                    <input
-                                        type="url"
-                                        name="website"
-                                        value={formData.website}
-                                        onChange={handleChange}
-                                        style={{ ...styles.input, paddingLeft: '2.5rem' }}
-                                        placeholder="https://example.com"
-                                    />
-                                    <div style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }}>
-                                        <GlobeIcon />
-                                    </div>
+                    {/* 1. Identity Card */}
+                    <div style={styles.card}>
+                        <div style={styles.cardHeader}>
+                            <div style={styles.cardTitle}>
+                                <div style={{ ...styles.iconWrapper, background: '#eff6ff', color: '#3b82f6' }}>
+                                    <BuildingIcon />
                                 </div>
-                            ) : (
-                                <div style={styles.value}>
-                                    <span style={{ color: '#94a3b8' }}><GlobeIcon /></span>
-                                    {organization.website ? (
-                                        <a href={organization.website} target="_blank" rel="noopener noreferrer" style={{ color: '#546E7A', textDecoration: 'none' }}>
-                                            {organization.website}
-                                        </a>
-                                    ) : (
-                                        <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>Not provided</span>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Contact Email */}
-                        <div style={styles.formGroup}>
-                            <label style={styles.label}>Contact Email</label>
-                            {isEditing ? (
-                                <div style={{ position: 'relative' }}>
-                                    <input
-                                        type="email"
-                                        name="contactEmail"
-                                        value={formData.contactEmail}
-                                        onChange={handleChange}
-                                        style={{ ...styles.input, paddingLeft: '2.5rem' }}
-                                        required
-                                        placeholder="contact@example.com"
-                                    />
-                                    <div style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }}>
-                                        <MailIcon />
-                                    </div>
-                                </div>
-                            ) : (
-                                <div style={styles.value}>
-                                    <span style={{ color: '#94a3b8' }}><MailIcon /></span>
-                                    {organization.contactEmail}
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Contact Phone */}
-                        <div style={styles.formGroup}>
-                            <label style={styles.label}>Contact Phone</label>
-                            {isEditing ? (
-                                <div style={{ position: 'relative' }}>
-                                    <input
-                                        type="tel"
-                                        name="contactPhone"
-                                        value={formData.contactPhone}
-                                        onChange={handleChange}
-                                        style={{ ...styles.input, paddingLeft: '2.5rem' }}
-                                        placeholder="+1 (555) 000-0000"
-                                    />
-                                    <div style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }}>
-                                        <PhoneIcon />
-                                    </div>
-                                </div>
-                            ) : (
-                                <div style={styles.value}>
-                                    <span style={{ color: '#94a3b8' }}><PhoneIcon /></span>
-                                    {organization.contactPhone || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>Not provided</span>}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Address - Full Width */}
-                    <div style={{ ...styles.formGroup, marginTop: '1rem' }}>
-                        <label style={styles.label}>Address</label>
-                        {isEditing ? (
-                            <div style={{ position: 'relative' }}>
-                                <textarea
-                                    name="address"
-                                    value={formData.address}
-                                    onChange={handleChange}
-                                    style={{ ...styles.textarea, paddingLeft: '2.5rem' }}
-                                    rows="3"
-                                    placeholder="123 Business Ave, Suite 100&#10;City, State, Zip"
-                                />
-                                <div style={{ position: 'absolute', left: '0.75rem', top: '1rem', color: '#94a3b8' }}>
-                                    <MapPinIcon />
-                                </div>
+                                Identity & Branding
                             </div>
-                        ) : (
-                            <div style={{ ...styles.value, alignItems: 'flex-start' }}>
-                                <span style={{ color: '#94a3b8', marginTop: '0.25rem' }}><MapPinIcon /></span>
-                                <span style={{ whiteSpace: 'pre-wrap' }}>
-                                    {organization.address || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>Not provided</span>}
-                                </span>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Description - Full Width */}
-                    <div style={styles.formGroup}>
-                        <label style={styles.label}>Description</label>
-                        {isEditing ? (
-                            <textarea
-                                name="description"
-                                value={formData.description}
-                                onChange={handleChange}
-                                style={styles.textarea}
-                                rows="4"
-                                placeholder="Tell us about your organization..."
-                            />
-                        ) : (
-                            <div style={{ ...styles.value, borderBottom: 'none', lineHeight: '1.6' }}>
-                                {organization.description || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>No description available</span>}
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Indian Invoice Details Section */}
-                    <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '2px solid #e2e8f0' }}>
-                        <h3 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1.5rem', color: '#1e293b' }}>
-                            Indian Invoice Details
-                        </h3>
-                        <div style={styles.grid}>
+                        </div>
+                        <div style={styles.cardBody}>
                             <div style={styles.formGroup}>
-                                <label style={styles.label}>Organization Logo</label>
+                                <label style={styles.label}>Organization Name</label>
+                                <p style={styles.helperText}>The official name of your firm as it appears on documents.</p>
+                                {isEditing ? (
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                        style={styles.input}
+                                        required
+                                        placeholder="e.g. Acme Architects"
+                                    />
+                                ) : (
+                                    <div style={styles.value}>{organization.name}</div>
+                                )}
+                            </div>
+
+                            <div style={{ ...styles.formGroup, marginTop: '1.5rem' }}>
+                                <label style={styles.label}>Logo</label>
+                                <p style={styles.helperText}>Upload your firm's logo (transparent PNG recommended).</p>
                                 {isEditing ? (
                                     <div>
                                         {organization.logoUrl && (
@@ -715,374 +650,224 @@ const OrganizationSettings = () => {
                                                 <img
                                                     src={organization.logoUrl}
                                                     alt="Current Logo"
-                                                    style={{
-                                                        maxHeight: '100px',
-                                                        maxWidth: '200px',
-                                                        borderRadius: '8px',
-                                                        border: '1px solid #e2e8f0'
-                                                    }}
+                                                    style={{ maxHeight: '60px', borderRadius: '4px', border: '1px solid #e2e8f0', padding: '4px' }}
                                                 />
                                                 <button
                                                     type="button"
                                                     onClick={handleLogoDelete}
-                                                    style={{
-                                                        position: 'absolute',
-                                                        top: '-8px',
-                                                        right: '-8px',
-                                                        background: '#ef4444',
-                                                        color: 'white',
-                                                        border: 'none',
-                                                        borderRadius: '50%',
-                                                        width: '24px',
-                                                        height: '24px',
-                                                        cursor: 'pointer',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        fontSize: '14px',
-                                                        fontWeight: 'bold'
-                                                    }}
-                                                    title="Delete logo"
+                                                    style={styles.deleteLogoButton}
+                                                    title="Remove logo"
                                                 >
                                                     ×
                                                 </button>
                                             </div>
                                         )}
-                                        <div style={{
-                                            border: '2px dashed #e2e8f0',
-                                            borderRadius: '8px',
-                                            padding: '1.5rem',
-                                            textAlign: 'center',
-                                            cursor: logoUploading ? 'not-allowed' : 'pointer',
-                                            backgroundColor: logoUploading ? '#f8fafc' : '#ffffff',
-                                            transition: 'all 0.2s'
-                                        }}
+                                        <div
+                                            style={styles.uploadBox}
                                             onClick={() => !logoUploading && document.getElementById('logo-upload-input')?.click()}
-                                            onMouseOver={(e) => !logoUploading && (e.currentTarget.style.borderColor = '#546E7A')}
-                                            onMouseOut={(e) => !logoUploading && (e.currentTarget.style.borderColor = '#e2e8f0')}
                                         >
                                             <input
                                                 id="logo-upload-input"
                                                 type="file"
-                                                accept="image/jpeg,image/png,image/gif,image/webp"
+                                                accept="image/png,image/jpeg,image/webp"
                                                 onChange={handleLogoFileSelect}
                                                 style={{ display: 'none' }}
                                                 disabled={logoUploading}
                                             />
                                             {logoUploading ? (
-                                                <div>
-                                                    <div style={{ marginBottom: '0.5rem' }}>
-                                                        <div style={{
-                                                            width: '100%',
-                                                            height: '8px',
-                                                            backgroundColor: '#e2e8f0',
-                                                            borderRadius: '4px',
-                                                            overflow: 'hidden'
-                                                        }}>
-                                                            <div style={{
-                                                                width: `${logoUploadProgress}%`,
-                                                                height: '100%',
-                                                                backgroundColor: '#546E7A',
-                                                                transition: 'width 0.3s'
-                                                            }}></div>
-                                                        </div>
-                                                    </div>
-                                                    <span style={{ color: '#64748b', fontSize: '0.875rem' }}>
-                                                        Uploading... {logoUploadProgress}%
-                                                    </span>
-                                                </div>
+                                                <span style={{ color: '#64748b' }}>Uploading... {logoUploadProgress}%</span>
                                             ) : (
-                                                <div>
-                                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" style={{ margin: '0 auto 0.5rem' }}>
-                                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                                        <polyline points="17 8 12 3 7 8" />
-                                                        <line x1="12" y1="3" x2="12" y2="15" />
-                                                    </svg>
-                                                    <div style={{ color: '#64748b', fontSize: '0.875rem' }}>
-                                                        Click to upload logo
-                                                    </div>
-                                                    <div style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.25rem' }}>
-                                                        JPEG, PNG, GIF, WebP • Max 2MB
-                                                    </div>
-                                                </div>
+                                                <span style={{ color: '#64748b', cursor: 'pointer' }}>
+                                                    Click to upload new logo
+                                                </span>
                                             )}
                                         </div>
                                     </div>
                                 ) : (
-                                    <div style={styles.value}>
+                                    <div style={{ marginTop: '0.5rem' }}>
                                         {organization.logoUrl ? (
-                                            <img src={organization.logoUrl} alt="Logo" style={{ maxHeight: '50px' }} />
+                                            <img src={organization.logoUrl} alt="Logo" style={{ maxHeight: '40px' }} />
                                         ) : (
-                                            <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>No logo uploaded</span>
+                                            <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>No logo set</span>
                                         )}
                                     </div>
                                 )}
                             </div>
-
-                            <div style={styles.formGroup}>
-                                <label style={styles.label}>GSTIN (15 digits)</label>
-                                {isEditing ? (
-                                    <input
-                                        type="text"
-                                        name="gstin"
-                                        value={formData.gstin}
-                                        onChange={handleChange}
-                                        style={styles.input}
-                                        maxLength="15"
-                                        placeholder="15-digit GSTIN"
-                                    />
-                                ) : (
-                                    <div style={styles.value}>{organization.gstin || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>Not provided</span>}</div>
-                                )}
-                            </div>
-
-                            <div style={styles.formGroup}>
-                                <label style={styles.label}>PAN</label>
-                                {isEditing ? (
-                                    <input
-                                        type="text"
-                                        name="pan"
-                                        value={formData.pan}
-                                        onChange={handleChange}
-                                        style={styles.input}
-                                        maxLength="10"
-                                        placeholder="10-character PAN"
-                                    />
-                                ) : (
-                                    <div style={styles.value}>{organization.pan || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>Not provided</span>}</div>
-                                )}
-                            </div>
-
-                            <div style={styles.formGroup}>
-                                <label style={styles.label}>COA Registration Number</label>
-                                {isEditing ? (
-                                    <input
-                                        type="text"
-                                        name="coaRegNumber"
-                                        value={formData.coaRegNumber}
-                                        onChange={handleChange}
-                                        style={styles.input}
-                                        placeholder="COA Registration Number"
-                                    />
-                                ) : (
-                                    <div style={styles.value}>{organization.coaRegNumber || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>Not provided</span>}</div>
-                                )}
-                            </div>
-                        </div>
-
-                        <div style={{ marginTop: '1rem' }}>
-                            <h4 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: '#475569' }}>Address Details</h4>
-                            <div style={styles.grid}>
-                                <div style={styles.formGroup}>
-                                    <label style={styles.label}>Address Line 1</label>
-                                    {isEditing ? (
-                                        <input
-                                            type="text"
-                                            name="addressLine1"
-                                            value={formData.addressLine1}
-                                            onChange={handleChange}
-                                            style={styles.input}
-                                            placeholder="Street address"
-                                        />
-                                    ) : (
-                                        <div style={styles.value}>{organization.addressLine1 || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>Not provided</span>}</div>
-                                    )}
-                                </div>
-
-                                <div style={styles.formGroup}>
-                                    <label style={styles.label}>Address Line 2</label>
-                                    {isEditing ? (
-                                        <input
-                                            type="text"
-                                            name="addressLine2"
-                                            value={formData.addressLine2}
-                                            onChange={handleChange}
-                                            style={styles.input}
-                                            placeholder="Apartment, suite, etc."
-                                        />
-                                    ) : (
-                                        <div style={styles.value}>{organization.addressLine2 || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>Not provided</span>}</div>
-                                    )}
-                                </div>
-
-                                <div style={styles.formGroup}>
-                                    <label style={styles.label}>City</label>
-                                    {isEditing ? (
-                                        <input
-                                            type="text"
-                                            name="city"
-                                            value={formData.city}
-                                            onChange={handleChange}
-                                            style={styles.input}
-                                            placeholder="City"
-                                        />
-                                    ) : (
-                                        <div style={styles.value}>{organization.city || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>Not provided</span>}</div>
-                                    )}
-                                </div>
-
-                                <div style={styles.formGroup}>
-                                    <label style={styles.label}>State</label>
-                                    {isEditing ? (
-                                        <input
-                                            type="text"
-                                            name="state"
-                                            value={formData.state}
-                                            onChange={handleChange}
-                                            style={styles.input}
-                                            placeholder="State"
-                                        />
-                                    ) : (
-                                        <div style={styles.value}>{organization.state || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>Not provided</span>}</div>
-                                    )}
-                                </div>
-
-                                <div style={styles.formGroup}>
-                                    <label style={styles.label}>Pincode</label>
-                                    {isEditing ? (
-                                        <input
-                                            type="text"
-                                            name="pincode"
-                                            value={formData.pincode}
-                                            onChange={handleChange}
-                                            style={styles.input}
-                                            maxLength="10"
-                                            placeholder="Pincode"
-                                        />
-                                    ) : (
-                                        <div style={styles.value}>{organization.pincode || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>Not provided</span>}</div>
-                                    )}
-                                </div>
-                            </div>
                         </div>
                     </div>
 
-                    {/* Bank Details Section */}
-                    <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '2px solid #e2e8f0' }}>
-                        <h3 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1.5rem', color: '#1e293b' }}>
-                            Bank Details
-                        </h3>
-                        <div style={styles.grid}>
+                    {/* 2. Contact Details */}
+                    <div style={styles.card}>
+                        <div style={styles.cardHeader}>
+                            <div style={styles.cardTitle}>
+                                <div style={{ ...styles.iconWrapper, background: '#f0fdf4', color: '#10b981' }}>
+                                    <MailIcon />
+                                </div>
+                                Contact Information
+                            </div>
+                        </div>
+                        <div style={styles.cardBody}>
                             <div style={styles.formGroup}>
-                                <label style={styles.label}>Bank Name</label>
+                                <label style={styles.label}>Official Email</label>
                                 {isEditing ? (
-                                    <input
-                                        type="text"
-                                        name="bankName"
-                                        value={formData.bankName}
-                                        onChange={handleChange}
-                                        style={styles.input}
-                                        placeholder="Bank Name"
-                                    />
+                                    <input type="email" name="contactEmail" value={formData.contactEmail} onChange={handleChange} style={styles.input} placeholder="contact@firm.com" />
                                 ) : (
-                                    <div style={styles.value}>{organization.bankName || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>Not provided</span>}</div>
+                                    <div style={styles.value}>{organization.contactEmail || '-'}</div>
                                 )}
                             </div>
-
                             <div style={styles.formGroup}>
-                                <label style={styles.label}>Account Number</label>
+                                <label style={styles.label}>Phone Number</label>
                                 {isEditing ? (
-                                    <input
-                                        type="text"
-                                        name="bankAccountNumber"
-                                        value={formData.bankAccountNumber}
-                                        onChange={handleChange}
-                                        style={styles.input}
-                                        placeholder="Account Number"
-                                    />
+                                    <input type="tel" name="contactPhone" value={formData.contactPhone} onChange={handleChange} style={styles.input} placeholder="+91 99999 99999" />
                                 ) : (
-                                    <div style={styles.value}>{organization.bankAccountNumber || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>Not provided</span>}</div>
+                                    <div style={styles.value}>{organization.contactPhone || '-'}</div>
                                 )}
                             </div>
-
                             <div style={styles.formGroup}>
-                                <label style={styles.label}>IFSC Code</label>
+                                <label style={styles.label}>Website</label>
                                 {isEditing ? (
-                                    <input
-                                        type="text"
-                                        name="bankIfsc"
-                                        value={formData.bankIfsc}
-                                        onChange={handleChange}
-                                        style={styles.input}
-                                        maxLength="11"
-                                        placeholder="11-character IFSC"
-                                    />
+                                    <input type="url" name="website" value={formData.website} onChange={handleChange} style={styles.input} placeholder="https://www.firm.com" />
                                 ) : (
-                                    <div style={styles.value}>{organization.bankIfsc || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>Not provided</span>}</div>
-                                )}
-                            </div>
-
-                            <div style={styles.formGroup}>
-                                <label style={styles.label}>Branch</label>
-                                {isEditing ? (
-                                    <input
-                                        type="text"
-                                        name="bankBranch"
-                                        value={formData.bankBranch}
-                                        onChange={handleChange}
-                                        style={styles.input}
-                                        placeholder="Branch Name"
-                                    />
-                                ) : (
-                                    <div style={styles.value}>{organization.bankBranch || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>Not provided</span>}</div>
-                                )}
-                            </div>
-
-                            <div style={styles.formGroup}>
-                                <label style={styles.label}>Account Name</label>
-                                {isEditing ? (
-                                    <input
-                                        type="text"
-                                        name="bankAccountName"
-                                        value={formData.bankAccountName}
-                                        onChange={handleChange}
-                                        style={styles.input}
-                                        placeholder="Account Holder Name"
-                                    />
-                                ) : (
-                                    <div style={styles.value}>{organization.bankAccountName || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>Not provided</span>}</div>
+                                    <div style={styles.value}>
+                                        {organization.website ? (
+                                            <a href={organization.website} target="_blank" rel="noreferrer" style={{ color: '#3b82f6' }}>{organization.website}</a>
+                                        ) : '-'}
+                                    </div>
                                 )}
                             </div>
                         </div>
                     </div>
 
-                    {/* Action Buttons */}
-                    {isEditing && (
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid #f1f5f9' }}>
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setIsEditing(false);
-                                    setFormData({
-                                        name: organization.name || '',
-                                        description: organization.description || '',
-                                        contactEmail: organization.contactEmail || '',
-                                        contactPhone: organization.contactPhone || '',
-                                        address: organization.address || '',
-                                        website: organization.website || ''
-                                    });
-                                    setError('');
-                                }}
-                                style={{ ...styles.button, ...styles.secondaryButton }}
-                                onMouseOver={(e) => e.currentTarget.style.background = '#f8fafc'}
-                                onMouseOut={(e) => e.currentTarget.style.background = 'white'}
-                            >
-                                <XIcon />
-                                Cancel
-                            </button>
-                            <button
-                                type="submit"
-                                style={{ ...styles.button, ...styles.primaryButton }}
-                                onMouseOver={(e) => e.currentTarget.style.background = '#455A64'}
-                                onMouseOut={(e) => e.currentTarget.style.background = '#546E7A'}
-                            >
-                                <SaveIcon />
-                                Save Changes
-                            </button>
+                    {/* 3. Legal & Address */}
+                    <div style={styles.card}>
+                        <div style={styles.cardHeader}>
+                            <div style={styles.cardTitle}>
+                                <div style={{ ...styles.iconWrapper, background: '#fff7ed', color: '#f59e0b' }}>
+                                    <MapPinIcon />
+                                </div>
+                                Legal & Registered Address
+                            </div>
                         </div>
-                    )}
-                </form>
-            </div>
+                        <div style={styles.cardBody}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
+                                <div style={styles.formGroup}>
+                                    <label style={styles.label}>GSTIN</label>
+                                    <p style={styles.helperText}>Tax Identification Number</p>
+                                    {isEditing ? (
+                                        <input type="text" name="gstin" value={formData.gstin} onChange={handleChange} style={styles.input} placeholder="GST Number" maxLength="15" />
+                                    ) : (
+                                        <div style={styles.value}>{organization.gstin || '-'}</div>
+                                    )}
+                                </div>
+                                <div style={styles.formGroup}>
+                                    <label style={styles.label}>COA Number</label>
+                                    <p style={styles.helperText}>Council of Architecture Reg. No.</p>
+                                    {isEditing ? (
+                                        <input type="text" name="coaRegNumber" value={formData.coaRegNumber} onChange={handleChange} style={styles.input} placeholder="CA/20XX/XXXXX" />
+                                    ) : (
+                                        <div style={styles.value}>{organization.coaRegNumber || '-'}</div>
+                                    )}
+                                </div>
+                                <div style={styles.formGroup}>
+                                    <label style={styles.label}>PAN</label>
+                                    <p style={styles.helperText}>Permanent Account Number</p>
+                                    {isEditing ? (
+                                        <input type="text" name="pan" value={formData.pan} onChange={handleChange} style={styles.input} placeholder="PAN Number" maxLength="10" />
+                                    ) : (
+                                        <div style={styles.value}>{organization.pan || '-'}</div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div style={{ marginTop: '1.5rem' }}>
+                                <label style={styles.label}>Registered Address</label>
+                                {isEditing ? (
+                                    <div style={{ display: 'grid', gap: '1rem' }}>
+                                        <input type="text" name="addressLine1" value={formData.addressLine1} onChange={handleChange} style={styles.input} placeholder="Address Line 1" />
+                                        <input type="text" name="addressLine2" value={formData.addressLine2} onChange={handleChange} style={styles.input} placeholder="Address Line 2 (Optional)" />
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+                                            <input type="text" name="city" value={formData.city} onChange={handleChange} style={styles.input} placeholder="City" />
+                                            <input type="text" name="state" value={formData.state} onChange={handleChange} style={styles.input} placeholder="State" />
+                                            <input type="text" name="pincode" value={formData.pincode} onChange={handleChange} style={styles.input} placeholder="ZIP / Pin" />
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div style={{ ...styles.value, lineHeight: '1.5' }}>
+                                        {organization.addressLine1 ? (
+                                            <>
+                                                {organization.addressLine1}<br />
+                                                {organization.addressLine2 && <>{organization.addressLine2}<br /></>}
+                                                {organization.city}, {organization.state} - {organization.pincode}
+                                            </>
+                                        ) : <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>Address not configured</span>}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 4. Bank Information */}
+                    <div style={styles.card}>
+                        <div style={styles.cardHeader}>
+                            <div style={styles.cardTitle}>
+                                <div style={{ ...styles.iconWrapper, background: '#f5f3ff', color: '#8b5cf6' }}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
+                                </div>
+                                Bank Account
+                            </div>
+                        </div>
+                        <div style={styles.cardBody}>
+                            <p style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: '1.5rem', background: '#f8fafc', padding: '1rem', borderRadius: '8px' }}>
+                                These details will be printed on invoices for client payments.
+                            </p>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
+                                <div style={styles.formGroup}>
+                                    <label style={styles.label}>Bank Name</label>
+                                    {isEditing ? <input type="text" name="bankName" value={formData.bankName} onChange={handleChange} style={styles.input} /> : <div style={styles.value}>{organization.bankName || '-'}</div>}
+                                </div>
+                                <div style={styles.formGroup}>
+                                    <label style={styles.label}>Account Number</label>
+                                    {isEditing ? <input type="text" name="bankAccountNumber" value={formData.bankAccountNumber} onChange={handleChange} style={styles.input} /> : <div style={styles.value}>{organization.bankAccountNumber || '-'}</div>}
+                                </div>
+                                <div style={styles.formGroup}>
+                                    <label style={styles.label}>IFSC Code</label>
+                                    {isEditing ? <input type="text" name="bankIfsc" value={formData.bankIfsc} onChange={handleChange} style={styles.input} /> : <div style={styles.value}>{organization.bankIfsc || '-'}</div>}
+                                </div>
+                                <div style={styles.formGroup}>
+                                    <label style={styles.label}>Branch</label>
+                                    {isEditing ? <input type="text" name="bankBranch" value={formData.bankBranch} onChange={handleChange} style={styles.input} /> : <div style={styles.value}>{organization.bankBranch || '-'}</div>}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                {/* Footer Action Bar */}
+                {isEditing && (
+                    <div style={styles.actionBar}>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setIsEditing(false);
+                                // Reset form logic here (simplified for this view)
+                                fetchOrganization();
+                            }}
+                            style={{ ...styles.button, ...styles.secondaryButton }}
+                        >
+                            <XIcon />
+                            Cancel Changes
+                        </button>
+                        <button
+                            type="submit"
+                            style={{ ...styles.button, ...styles.primaryButton }}
+                        >
+                            <SaveIcon />
+                            Save All Settings
+                        </button>
+                    </div>
+                )}
+            </form>
         </div>
     );
 };
